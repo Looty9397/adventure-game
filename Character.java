@@ -5,10 +5,23 @@ public class Character {
     private String name;
     private String speech;
 
+    /**
+     * Create a character without any speech
+     * @param name
+     * @param maxHP
+     * @param str
+     */
     public Character (String name, int maxHP, int str) {
         this(name, maxHP, str, "");
     }
 
+    /**
+     * Create a complete character
+     * @param name
+     * @param maxHP
+     * @param str
+     * @param speech
+     */
     public Character (String name, int maxHP, int str, String speech) {
         this.name = name;
         this.maxHP = maxHP;
@@ -17,6 +30,9 @@ public class Character {
         this.str = str;
     }
 
+    /**
+     * talk
+     */
     public void introduce () {
         System.out.println(this.speech);
     }
@@ -37,6 +53,10 @@ public class Character {
         return this.name;
     }
 
+    /**
+     * sets hp, not more than maxHP though
+     * @param val
+     */
     public void setHP (int val) {
         if (val > this.maxHP) {
             this.hp = this.maxHP;
@@ -45,6 +65,10 @@ public class Character {
         }
     }
 
+    /**
+     * heal some damage
+     * @param val
+     */
     public void heal (int val) {
         if (this.hp + val > this.maxHP) {
             this.hp = maxHP;
@@ -55,5 +79,10 @@ public class Character {
 
     public boolean isDead () {
         return this.hp <= 0;
+    }
+
+    @Override 
+    public String toString () {
+        return String.format("%s: %d/%dhp", this.name, this.hp, this.maxHP);
     }
 }
