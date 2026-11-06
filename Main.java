@@ -1,17 +1,215 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
     private static Player player;
-    private static boolean[][] map = new boolean[10][10];
-    private static Character[][] enemy = new Character[10][10];
-    private static Item[][] item = new Item[10][10];
+    private static final boolean[][] map = new boolean[10][10];
+    private static final Character[][] enemies = new Character[10][10];
+    private static final Item[][] items = new Item[10][10];
+    private static char lastMove;
 
     public static void main(String[] args) {
-        try (Scanner input = new Scanner(System.in)) {
+        File f = new File("log.txt");
+        try (PrintWriter print = new PrintWriter(f); Scanner input = new Scanner(System.in)) {
             System.out.print("Enter your name:\n> ");
             player = new Player(input.nextLine());
-        }
+            setup();
 
-        System.out.println(player.getSTR());
+            while (true) { // only thing that can kill the player is combat, death is handled there
+                printMap();
+                act(print, input);
+                if (items[player.getY()][player.getX()] != null) {
+                    player.acquire(items[player.getY()][player.getX()]);
+                    print.println(player.getName() + " picked up " + items[player.getY()][player.getX()]);
+                    items[player.getY()][player.getX()] = null;
+                }
+                if (enemies[player.getY()][player.getX()] != null) {
+                    fight(enemies[player.getY()][player.getX()], print, input);
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public static void act (PrintWriter print, Scanner input) {
+        System.out.print("What do you want to do? (M)ove <dir>, (E)quip / (C)hange weapon, or (U)se an item\n> ");
+        String in = input.next();
+        char action = in.charAt(0);
+
+        switch (java.lang.Character.toLowerCase(action)) {
+            case 'm' -> {
+                if (!input.hasNext()) {System.out.print("Which direction? (N/E/S/W U/D/L/R)\n> ");}
+                lastMove = input.next().charAt(0);
+                print.println(player.move(lastMove));
+                map[player.getY()][player.getX()] = true;
+            }
+            case 'e', 'c' -> {
+                player.printInventory();
+                System.out.print("Which weapon do you want to equip, replacing " + player.getWeapon() + "?\n> ");
+                if (input.hasNextInt()) {
+                    print.println(player.equip(input.nextInt()));
+                    input.nextLine();
+                } else if (input.hasNextLine()) {
+                    input.nextLine();
+                }
+            }
+            case 'u' -> {
+                player.printInventory();
+                System.out.print("Which item do you want to use?\n> ");
+                if (input.hasNextInt()) {
+                    print.println(player.useItem(input.nextInt()));
+                    input.nextLine();
+                } else if (input.hasNextLine()) {
+                    input.nextLine();
+                }
+            }
+            case 'q' -> {
+                System.exit(0);
+            }
+        }
+    }
+
+    public static void printMap () {
+        //System.out.println(Arrays.toString(player.getPos()));
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (!map[i][j]) {
+                    System.out.print(". ");
+                } else if (enemies[i][j] != null) {
+                    System.out.print("X ");
+                } else if (player.getX() == j && player.getY() == i) {
+                    System.out.print("P ");
+                } else {
+                    System.out.print("_ ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public static void fight (Character enemy, PrintWriter print, Scanner input) {
+        int turns = 0;
+        print.println(player + " engaged in combat with " + enemy);
+        while (!(player.isDead() || enemy.isDead())) {
+            turns++; // RNG IS KEYYYY
+            int pDmg = (int)(player.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
+            int eDmg = (int)(enemy.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
+            // player turn
+            System.out.print("What do you want to do? (A)ttack, (U)se item, (R)un\n> ");
+            char action = input.next().charAt(0);
+            switch (java.lang.Character.toLowerCase(action)) {
+                case 'a' -> {
+                    print.println(player.useWeapon()); // most of the time will do nothing, except for Deather (thanks Keniel for inspiration)
+                    System.out.printf("You attack for %d damage\n", pDmg);
+                    System.out.printf("%s now has %d/%d hp\n", enemy.toString(), enemy.getHP() - pDmg, enemy.getMaxHP());
+                    print.printf("%s attacks for %d damage\n", player.toString(), pDmg);
+                    print.printf("%s now has %d/%d hp\n", enemy.toString(), enemy.getHP() - pDmg, enemy.getMaxHP());
+                    enemy.setHP(enemy.getHP() - pDmg);
+                }
+                case 'u' -> {
+                    player.printInventory();
+                    System.out.print("Which item do you want to use?\n> ");
+                    if (input.hasNextInt()) {
+                        print.println(player.useItem(input.nextInt()));
+                        input.nextLine();
+                    } else if (input.hasNextLine()) {
+                        input.nextLine();
+                    }
+                }
+                case 'r' -> {
+                    player.move(switch (lastMove) {
+                        case 'n', 'u' -> 's';
+                        case 'e', 'r' -> 'w';
+                        case 's', 'd' -> 'n';
+                        case 'w', 'l' -> 'e';
+                        default -> 'n';
+                    });
+                    System.out.println("You ran from the fight");
+                    print.println(player + " ran from the fight");
+                    return;
+                }
+                default -> {
+                    System.out.println("You do nothing");
+                    print.println(player + " did nothing");
+                }
+            }
+            // enemy turn
+            if (!enemy.isDead()) {
+                System.out.printf("%s attacks you for %d damage\n", enemy.toString(), eDmg);
+                System.out.printf("You now have %d/%d hp\n", player.getHP() - eDmg, player.getMaxHP());
+                print.printf("%s attacks %s for %d damage\n", enemy.toString(), player.toString(), eDmg);
+                print.printf("%s now have %d/%d hp\n", player.toString(), player.getHP() - eDmg, player.getMaxHP());
+                player.setHP(player.getHP() - eDmg);
+            }
+        }
+        if (enemy.isDead()) {
+            int reward = (int)((enemy.getMaxHP() / 2) * Math.pow(turns, 1.5));
+            System.out.printf("%s has died\nYou have won the fight\n", enemy.toString());
+            System.out.println("You received $" + reward + " in spoils");
+            print.printf("%s has died\n%s has won the fight\n", enemy.toString(), player.toString());
+            print.println(player + " received $" + reward + " in spoils");
+            player.addMoney(reward);
+
+            // remove the enemy from the map
+            enemies[player.getY()][player.getX()] = null;
+        } else { // other result is player.isDead() == true
+            System.out.println("You have died: Thank you for playing");
+            print.println(player + " has died: Thank you for playing");
+
+            // stats
+            int actions = 0;
+            File f = new File("log.txt");
+            if (!f.exists()) {
+                try {
+                    f.createNewFile();
+                } catch (IOException ex) {
+                    System.out.println(ex);
+                }
+            }
+            try (Scanner log = new Scanner(f)) {
+                while (log.hasNextLine()) {
+                    log.nextLine();
+                    actions++;
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+
+            System.out.println("You completed a total of " + actions + " actions");
+            System.out.println("You had $" + player.getMoney() + " when you died");
+            System.exit(0);
+        }
+    }
+
+    public static void setup () {
+        // Spawn monsters
+        // just a blank for now, testing
+        enemies[1][1] = new Character("blank", 50, 5);
+
+        // Summon items
+        // some more blanks for testing
+        items[1][1] = new Item("apple");
+        items[1][2] = new Item("gapple", true);
+        items[2][1] = new Item("sword", false, true, 5);
+
+        int x = -1; int y = -1; // to be used for spawning the player
+        for (int i = 0; i < map.length; i++) { // start the x and y at an item or monster to avoid errors
+            for (int j = 0; j < map[i].length; j++) {
+                if (enemies[i][j] != null || items[i][j] != null) {
+                    x = j; y = i; break;
+                }
+            }
+            if (x != -1) {
+                break;
+            }
+        }
+        // Place the player
+        while (enemies[y][x] != null || items[y][x] != null) {
+            x = (int)(Math.random() * map.length);
+            y = (int)(Math.random() * map.length);
+        }
+        player.setPos(new int[]{y, x});
+        map[player.getY()][player.getX()] = true;
     }
 }
