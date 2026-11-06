@@ -10,12 +10,28 @@ public class Main {
 
     public static void main(String[] args) {
         File f = new File("log.txt");
-        try (PrintWriter print = new PrintWriter(f); Scanner input = new Scanner(System.in)) {
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        } else {
+            try (PrintWriter print = new PrintWriter(f)) {
+                print.print(""); // Clear the file
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
+
+        // ChatGPT was used here to correct NoSuchElementException
+        // new FileWriter(f, true) makes it be in append mode so its not just continuously overwriting.
+        try (PrintWriter print = new PrintWriter(new FileWriter(f, true)); Scanner input = new Scanner(System.in)) {
             System.out.print("Enter your name:\n> ");
             player = new Player(input.nextLine());
             setup();
 
-            while (true) { // only thing that can kill the player is combat, death is handled there
+            while (!player.isDead()) {
                 printMap();
                 act(print, input);
                 if (items[player.getY()][player.getX()] != null) {
@@ -27,13 +43,14 @@ public class Main {
                     fight(enemies[player.getY()][player.getX()], print, input);
                 }
             }
+            // When the player dies or quits the game, the loop exits and the code ends, letting all the output go to log.txt
         } catch (IOException ex) {
             System.out.println(ex);
         }
     }
 
     public static void act (PrintWriter print, Scanner input) {
-        System.out.print("What do you want to do? (M)ove <dir>, (E)quip / (C)hange weapon, or (U)se an item\n> ");
+        System.out.print("What do you want to do? (M)ove <dir>, (E)quip / (C)hange weapon, (U)se an item, (P)lay a (G)ame, or (Q)uit the game?\n> ");
         String in = input.next();
         char action = in.charAt(0);
 
@@ -46,12 +63,12 @@ public class Main {
             }
             case 'e', 'c' -> {
                 player.printInventory();
-                System.out.print("Which weapon do you want to equip, replacing " + player.getWeapon() + "?\n> ");
+                System.out.printf("Which weapon do you want to equip%s?\n> ", (player.getWeapon() != null) ? ", replacing" + player.getWeapon() : "");
                 if (input.hasNextInt()) {
                     print.println(player.equip(input.nextInt()));
                     input.nextLine();
-                } else if (input.hasNextLine()) {
-                    input.nextLine();
+                } else if (input.hasNext()) {
+                    input.next();
                 }
             }
             case 'u' -> {
@@ -60,12 +77,15 @@ public class Main {
                 if (input.hasNextInt()) {
                     print.println(player.useItem(input.nextInt()));
                     input.nextLine();
-                } else if (input.hasNextLine()) {
-                    input.nextLine();
+                } else if (input.hasNext()) {
+                    input.next();
                 }
             }
+            case 'p', 'g' -> {
+                print.println(randGame());
+            }
             case 'q' -> {
-                System.exit(0);
+                die(print);
             }
         }
     }
@@ -113,8 +133,8 @@ public class Main {
                     if (input.hasNextInt()) {
                         print.println(player.useItem(input.nextInt()));
                         input.nextLine();
-                    } else if (input.hasNextLine()) {
-                        input.nextLine();
+                    } else if (input.hasNext()) {
+                        input.next();
                     }
                 }
                 case 'r' -> {
@@ -139,7 +159,7 @@ public class Main {
                 System.out.printf("%s attacks you for %d damage\n", enemy.toString(), eDmg);
                 System.out.printf("You now have %d/%d hp\n", player.getHP() - eDmg, player.getMaxHP());
                 print.printf("%s attacks %s for %d damage\n", enemy.toString(), player.toString(), eDmg);
-                print.printf("%s now have %d/%d hp\n", player.toString(), player.getHP() - eDmg, player.getMaxHP());
+                print.printf("%s now has %d/%d hp\n", player.toString(), player.getHP() - eDmg, player.getMaxHP());
                 player.setHP(player.getHP() - eDmg);
             }
         }
@@ -148,37 +168,13 @@ public class Main {
             System.out.printf("%s has died\nYou have won the fight\n", enemy.toString());
             System.out.println("You received $" + reward + " in spoils");
             print.printf("%s has died\n%s has won the fight\n", enemy.toString(), player.toString());
-            print.println(player + " received $" + reward + " in spoils");
+            print.printf("%s received $%d in spoils\n", player.toString(), reward);
             player.addMoney(reward);
 
             // remove the enemy from the map
             enemies[player.getY()][player.getX()] = null;
         } else { // other result is player.isDead() == true
-            System.out.println("You have died: Thank you for playing");
-            print.println(player + " has died: Thank you for playing");
-
-            // stats
-            int actions = 0;
-            File f = new File("log.txt");
-            if (!f.exists()) {
-                try {
-                    f.createNewFile();
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }
-            }
-            try (Scanner log = new Scanner(f)) {
-                while (log.hasNextLine()) {
-                    log.nextLine();
-                    actions++;
-                }
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            System.out.println("You completed a total of " + actions + " actions");
-            System.out.println("You had $" + player.getMoney() + " when you died");
-            System.exit(0);
+            die(print);
         }
     }
 
@@ -212,4 +208,77 @@ public class Main {
         player.setPos(new int[]{y, x});
         map[player.getY()][player.getX()] = true;
     }
+
+    public static void die (PrintWriter print) {
+        // stats
+        int actions = 0;
+        File f = new File("log.txt");
+        try (Scanner log = new Scanner(f)) {
+            while (log.hasNextLine()) {
+                log.nextLine();
+                actions++;
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+
+        System.out.println("You completed a total of " + actions + " actions");
+        System.out.println("You had $" + player.getMoney() + " when you " + ((player.isDead()) ? "died" : "quit"));
+
+        if (player.isDead()) {
+            System.out.println("You have died: Thank you for playing");
+            print.println(player + " has died: Thank you for playing");
+        } else {
+            System.out.println("Thank you for playing");
+            print.println("Thank you for playing");
+        }
+
+        // kill the player so that the loop in main knows to break, closing the PrintWriter
+        player.setHP(player.getHP() - player.getMaxHP() - 1);
+    }
+
+    public static String randGame () {
+        if (player.getMoney() <= 0) {
+            System.out.println("You cannot play a game without money");
+            return player.getName() + " tried to gamble but had no money";
+        } else {
+            int[] rolls = new int[]{
+                (int)(Math.random() * 6),
+                (int)(Math.random() * 6),
+                (int)(Math.random() * 6),
+                (int)(Math.random() * 6),
+                (int)(Math.random() * 6),
+                (int)(Math.random() * 6)
+            };
+            int[] original = Arrays.copyOf(rolls, rolls.length);
+            Arrays.sort(rolls);
+
+            int earnings = 0;
+            if (rolls[0] == rolls[5] || rolls[0] == rolls[4] || rolls[1] == rolls[5]) {
+                earnings = (int)(Math.random() * 5) + 6; // 6 - 10
+            } else if ((rolls[0] == rolls[2] && rolls[3] == rolls[5])
+                        || rolls[0] == rolls[2]
+                        || rolls[1] == rolls[3]
+                        || rolls[2] == rolls[4]
+                        || rolls[3] == rolls[5]) {
+                earnings = (int)(Math.random() * 4) + 4; // 4 - 7
+            } else if ((rolls[0] == rolls[1] && rolls[2] == rolls[3] && rolls[4] == rolls[5])) {
+                earnings = 4;
+            } else if ((rolls[0] == rolls[1] && (rolls[2] == rolls[3] || rolls[3] == rolls[4] || rolls[4] == rolls[5]))
+                        || (rolls[1] == rolls[2] && (rolls[3] == rolls[4] || rolls[4] == rolls[5]))
+                        || (rolls[2] == rolls[3] && rolls[4] == rolls[5])) {
+                earnings = (int)(Math.random() * 2) + 2; // 2 - 3
+            } else if (rolls[0] == rolls[1] || rolls[1] == rolls[2] || rolls[2] == rolls[3] || rolls[3] == rolls [4] || rolls[4] == rolls[5]) {
+                earnings = 1;
+            }
+            if (earnings > 0) {
+                player.addMoney(player.getMoney() * (earnings - 1));
+            } else {
+                player.loseMoney(player.getMoney());
+            }
+            System.out.printf("You rolled %s, and you %dx'ed your money\n", Arrays.toString(original), earnings);
+            return String.format("%s rolled %s, and %dx'ed their money\n", player.getName(), Arrays.toString(original), earnings);
+        }
+    }
+
 }

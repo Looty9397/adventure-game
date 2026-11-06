@@ -8,6 +8,8 @@ public class Player extends Character {
 
     public Player (String name) {
         super(name, 50, 5);
+        this.money = 10;
+        //System.out.println(this.inventory.size());
     }
 
     public int getX () {
@@ -59,20 +61,23 @@ public class Player extends Character {
         }
     }
 
-    public String equip (int i) {
-        if (this.inventory.get(i).isConsumable()) {
-            return "Cannot equip a consumable item.";
-        }
-        if (i < this.inventory.size() && i >= 0) {
-            Item temp = this.inventory.get(i).copy();
+    public String equip (int val) {
+        if (val >= this.inventory.size() || val < 0) {
+            System.out.println("Cannot equip item " + val + " which does not exist");
+            return this.getName() + " tried to equip a nonexistent item";
+        }else if (this.inventory.get(val).isConsumable()) {
+            System.out.println("Cannot equip a consumable item");
+            return this.getName() + " tried to equip a consumable item";
+        } else  {
+            Item temp = this.inventory.get(val).copy();
             if (this.weapon == null) {
-                this.inventory.remove(i);
+                this.inventory.remove(val);
             } else {
-                this.inventory.set(i, this.weapon.copy());
+                this.inventory.set(val, this.weapon.copy());
             }
             this.weapon = temp;
+            return "You have equipped " + this.weapon + " with ATK " + this.weapon.getATK();
         }
-        return "You have equipped " + this.weapon + " with ATK " + this.weapon.getATK();
     }
 
     public String move (char dir) {
@@ -114,15 +119,21 @@ public class Player extends Character {
     }
 
     public String useItem (int val) {
-        if (this.inventory.get(val).isWeapon()) {
+        if (val >= this.inventory.size() || val < 0) {
+            System.out.println("Cannot use item " + val + " which does not exist");
+            return this.getName() + " tried to use a nonexistent item";
+        }else if (this.inventory.get(val).isWeapon()) {
+            System.out.println("Cannot use a weapon");
             return this.getName() + " tried to use a weapon";
+        } else  {
+            this.inventory.get(val).use(this);
+            String out = String.format("%s used the%s item %s", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
+            if (this.inventory.get(val).isConsumable()) {
+                discard(val);
+            }
+            return out;
         }
-        this.inventory.get(val).use(this);
-        String out = this.getName() + " used the item " + this.inventory.get(val);
-        if (this.inventory.get(val).isConsumable()) {
-            discard(val);
-        }
-        return out;
+
     }
 
     public String useWeapon () {
