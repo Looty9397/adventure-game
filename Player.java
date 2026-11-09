@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * Player
+ */
 public class Player extends Character {
     private final ArrayList<Item> inventory = new ArrayList<>();
     private int x; private int y;

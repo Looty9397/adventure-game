@@ -1,12 +1,15 @@
+/**
+ * Character: base for all characters
+ */
 public class Character {
     private int hp;
     private int maxHP;
     private int str;
     private String name;
-    private String speech;
+    private String intro;
 
     /**
-     * Create a character without any speech
+     * Create a character without any intro
      * @param name
      * @param maxHP
      * @param str
@@ -20,13 +23,13 @@ public class Character {
      * @param name
      * @param maxHP
      * @param str
-     * @param speech
+     * @param intro
      */
-    public Character (String name, int maxHP, int str, String speech) {
+    public Character (String name, int maxHP, int str, String intro) {
         this.name = name;
         this.maxHP = maxHP;
         this.hp = this.maxHP;
-        this.speech = speech;
+        this.intro = intro;
         this.str = str;
     }
 
@@ -34,7 +37,7 @@ public class Character {
      * talk
      */
     public void introduce () {
-        System.out.println(this.speech);
+        System.out.println(this.intro);
     }
 
     public int getHP () {

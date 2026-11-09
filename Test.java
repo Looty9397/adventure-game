@@ -10,6 +10,8 @@ public class Test {
         for (int i = 0; i < 10; i++) {
             money = randGame(money);
         }
+
+        System.out.println(new int[]{1, 2}.equals(new int[]{1, 2}));
     }
 
     public static int randGame (int money) {

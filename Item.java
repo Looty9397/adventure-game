@@ -1,3 +1,6 @@
+/**
+ * Item: base for all items
+ */
 public class Item {
     private String name;
     private boolean weapon;
@@ -24,6 +27,7 @@ public class Item {
     public void use (Player target) {
         // This is to be overridden in subclasses.
         // Weapons will just output some stuff like "you swing your sword"
+        System.out.println("You toss the " + name + " in your hand");
     }
 
     public boolean isWeapon () {

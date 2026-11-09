@@ -1,3 +1,6 @@
+/**
+ * DeatherNote: unveil the secrets of the humble Deather
+ */
 public class DeatherNote extends Item {
     public DeatherNote () {
         super("Mysterious Note");

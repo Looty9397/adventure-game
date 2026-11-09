@@ -48,6 +48,8 @@ public class Main {
                 }
             }
             // When the player dies or quits the game, the loop exits and the code ends, letting all the output go to log.txt
+            // in the case that it doesn't, output something useless that can be cut off
+            print.println("ENDOFFILE");
         } catch (IOException ex) {
             System.out.println(ex);
         }
@@ -177,7 +179,7 @@ public class Main {
                 }
             }
             // enemy turn
-            if (!enemy.isDead()) {
+            if (!enemy.isDead() && !player.isDead()) { // checks for player because Pill can insta-kill on player's turn
                 System.out.printf("%s attacks you for %d damage\n", enemy.toString(), eDmg);
                 System.out.printf("You now have %d/%d hp\n", player.getHP() - eDmg, player.getMaxHP());
                 print.printf("%s attacks %s for %d damage\n", enemy.toString(), player.toString(), eDmg);
@@ -205,15 +207,112 @@ public class Main {
      */
     public static void setup () {
         // Spawn monsters
-        // just a blank for now, testing
-        enemies[1][1] = new Character("blank", 50, 5);
+        // ALL MONSTERS:
+        //     Tank: Orc, Wolf, Golem
+        //     Glass Cannon: Goblin, Bandit
+        //     Balanced: Adventurer, Dragon (boss)
+        // NOTE: They don't really do anything so there's no need for subclasses. the default class will suffice
+        int[] dragonPos = {(int)(Math.random() * map.length), (int)(Math.random() * map.length)}; // only one will exist
+        for (int i = 0; i < enemies.length; i++) {
+            for (int j = 0; j < enemies[i].length; j++) {
+                if (Arrays.compare(new int[]{i, j}, dragonPos) == 0) {
+                    enemies[i][j] = new Character("Dragon", 1000, 20, "A glorious Dragon blocks your path");
+                } else if (Math.random() < 0.2) { // slightly rarer than items
+                    double typeSeed = Math.random();
+                    double specSeed = Math.random();
+                    if (typeSeed < 0.5) {
+                        if (specSeed < 0.6) {
+                            enemies[i][j] = new Character("Goblin", 25, 10, "A Goblin emerges from the brush"); // don't let him live
+                        } else {
+                            enemies[i][j] = new Character("Bandit", 75, 6, "A Bandit appears behind you"); // hes human so tankier
+                        }
+                    } else if (typeSeed < (5 / 6)) { // 1/3 for this, 1/6 for the next
+                        if (specSeed < (4 / 9)) {
+                            enemies[i][j] = new Character("Wolf", 150, 4, "A snarling Wolf bounds onto the road");
+                        } else if (specSeed < (7 / 9)) {
+                            enemies[i][j] = new Character("Orc", 250, 3, "A lone Orc lumbers towards you");
+                        } else {
+                            enemies[i][j] = new Character("Golem", 500, 2, "A massive Golem impedes your advance");
+                        }
+                    } else {
+                        enemies[i][j] = new Character("Adventurer", 100, 6, "A fellow Adventurer challenges you");
+                    }
+                }
+            }
+            
+        }
 
         // Summon items
-        // some more blanks for testing
-        items[1][1] = new Item("apple");
-        items[1][2] = new Item("gapple", true);
-        items[2][1] = new Item("sword", false, true, 5);
+        // ALL ITEMS:
+        //     Consumable: Card, Food, Pill (CHECK)
+        //     Weapon: Deather, Shovel, Spear, Sword (CHECK)
+        //     Neither: DeatherNote, Item (CHECK)
+        int[][] deatherPos = { // There will only be one of each of these on the map, so they must have set places to spawn
+            {(int)(Math.random() * map.length), (int)(Math.random() * map.length)}, // DeatherNote
+            {(int)(Math.random() * map.length), (int)(Math.random() * map.length)} //  Deather
+        };
 
+        while (Arrays.compare(deatherPos[0], deatherPos[1]) == 0) {
+            // no need to shuffle the other, it's position is good as is
+            deatherPos[1] = new int[]{(int)(Math.random() * map.length), (int)(Math.random() * map.length)};
+        }
+
+        for (int i = 0; i < items.length; i++) {
+            for (int j = 0; j < items[i].length; j++) {
+                if (Arrays.compare(new int[]{i, j}, deatherPos[0]) == 0) {
+                    items[i][j] = new DeatherNote();
+                } else if (Arrays.compare(new int[]{i, j}, deatherPos[1]) == 0) {
+                    items[i][j] = new Deather();
+                } else if (Math.random() < 0.25) { // one in four chance given not a deather or deathernote
+                    double typeSeed = Math.random();
+                    double specSeed = Math.random();
+                    if (typeSeed < (1 / 3)) { // (1 / 3) - 0 = 33.33...% chance
+                        // 20% for Large, 80% for Small or nothing
+                        // in order for the overall chance of Small to be 20%, 0.2*(1/0.8) = 0.25, it should be 25%
+                        items[i][j] = new Item(((Math.random() < 0.2) ? "Large " : ((Math.random() < 0.25) ? "Small " : "")) + ((Math.random() < 0.5) ? "Stick" : "Rock"));
+                    } else if (typeSeed < (5 / 6)) { // (5 / 6) - (1 / 3) = 50% chance
+                        if (specSeed < (1 / 2)) {
+                            String[] names = {"Bread", "Apple", "Steak", "Carrot", "Golden Apple"};
+                            int[] saturation = {5, 2, 8, 1, 15};
+                            int index = (int)(Math.random() * names.length);
+                            items[i][j] = new Food(names[index], saturation[index]);
+                        } else if (specSeed < (2 / 3)) { // 2/3 - 1/2 = 1/6
+                            items[i][j] = new Card((int)(Math.random() * 21) - 10);
+                        } else { // 1 - (2/3) = 1/3
+                            items[i][j] = new Pill();
+                        }
+                    } else { // 1 in 6 chance
+                        String[] types = {"Wooden", "Golden", "Stone", "Iron", "Diamond", "Netherite"};
+                        int[] atks = {2, 1, 4, 5, 7, 10};
+                        // different rarities needs some weighting
+                        // wood = 35%, gold = 10%, sotne = 25%, iron = 15%, diamond = 10%, netherite = 5%
+                        double rng = Math.random(); int index;
+                        if (rng < 0.35) {index = 0;}
+                        else if (rng < 0.45) {
+                            index = 1;
+                        } else if (rng < 0.7) {
+                            index = 2;
+                        } else if (rng < 0.85) {
+                            index = 3;
+                        } else if (rng < 0.95) {
+                            index = 4;
+                        } else {
+                            index = 5;
+                        }
+
+                        if (specSeed < (1 / 3)) {
+                            items[i][j] = new Sword(types[index], atks[index] + 2);
+                        } else if (specSeed < (2 / 3)) {
+                            items[i][j] = new Spear(types[index], atks[index]);
+                        } else {
+                            items[i][j] = new Shovel(types[index], atks[index] - 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Summon the player
         int x = -1; int y = -1; // to be used for spawning the player
         for (int i = 0; i < map.length; i++) { // start the x and y at an item or monster to avoid errors
             for (int j = 0; j < map[i].length; j++) {
@@ -270,8 +369,8 @@ public class Main {
     }
 
     /**
-     * GAMBLING
-     * @return thingy to log, could have gone in another class but that's a stretch goal
+     * GAMBLING, could be in a separate class (only Main method that isnt a void) but that's a stretch goal
+     * @return thingy to log
      */
     public static String randGame () {
         if (player.getMoney() <= 0) {

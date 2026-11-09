@@ -1,5 +1,5 @@
 /**
- * Pill: 30/70 kill/heal
+ * Pill: 30/70 kill/save
  */
 public class Pill extends Item {
     private final boolean seed;
@@ -12,8 +12,9 @@ public class Pill extends Item {
     @Override
     public void use (Player target) {
         if (seed) {
-            // not much but it's enough
-            int healAmt = (int)(Math.random() * 10) + 5;
+            // ~~not much but it's enough~~
+            // needs to be plenty so that the reward justifies the risk
+            int healAmt = (int)(Math.random() * 11) + 20; // 20 - 30
             target.heal(healAmt);
             System.out.println("You swallowed the pill and healed " + healAmt + " hp");
         } else {
