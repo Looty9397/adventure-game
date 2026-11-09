@@ -182,7 +182,6 @@ public class Player extends Character {
             // and why would you kill yourself
             // just a bad idea
             String out = String.format("%s used the%s item %s\n", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
-            System.out.printf("You used the%s item %s\n", (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
             // prepping a output string beforehand because it might not exist anymore when returning the log str
             if (this.inventory.get(val).isConsumable()) {
                 discard(val); // oopsie daisy you consumed the consumable

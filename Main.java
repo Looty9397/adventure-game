@@ -26,17 +26,17 @@ public class Main {
 
         // ChatGPT was used here to correct NoSuchElementException
         // new FileWriter(f, true) makes it be in append mode so its not just continuously overwriting.
-        try (PrintWriter print = new PrintWriter(new FileWriter(f, true)); Scanner input = new Scanner(System.in)) {
+        try (PrintWriter print = new PrintWriter(new FileWriter(f, true))) {
             // Note that essentially every action done in the program is with a method that returns a string.
             // this is to make logging the stuff easy, the output goes straight into the PrintWriter.
             System.out.print("Enter your name:\n> ");
-            player = new Player(input.nextLine());
+            player = new Player(Input.nextLine());
             setup();
 
             // A not dead player is an alive player.
             while (!player.isDead()) {
                 printMap();
-                act(print, input);
+                act(print);
                 if (items[player.getY()][player.getX()] != null) { // pick up item
                     player.acquire(items[player.getY()][player.getX()]);
                     System.out.println("You picked up " + items[player.getY()][player.getX()]);
@@ -44,7 +44,7 @@ public class Main {
                     items[player.getY()][player.getX()] = null;
                 }
                 if (enemies[player.getY()][player.getX()] != null) { // fight, after item
-                    fight(enemies[player.getY()][player.getX()], print, input);
+                    fight(enemies[player.getY()][player.getX()], print);
                 }
             }
             // When the player dies or quits the game, the loop exits and the code ends, letting all the output go to log.txt
@@ -56,38 +56,39 @@ public class Main {
     /**
      * Have the player perform an action
      * @param print PrintWriter to log the action in a file
-     * @param input Scanner to get user input
      */
-    public static void act (PrintWriter print, Scanner input) {
+    public static void act (PrintWriter print) {
         System.out.print("What do you want to do? (M)ove <dir>, (E)quip / (C)hange weapon, (U)se an item, (P)lay a (G)ame, or (Q)uit the game?\n> ");
         //String in = input.next();
         //char action = in.charAt(0);
 
-        switch (java.lang.Character.toLowerCase(input.next().charAt(0))) {
+        // ohh fuck i just realized why i have to use java.lang.Character
+        // it's becaues i overwrote the plain Character reference
+        switch (java.lang.Character.toLowerCase(Input.next().charAt(0))) {
             case 'm' -> { // Move
-                if (!input.hasNext()) {System.out.print("Which direction? (N/E/S/W U/D/L/R)\n> ");}
-                lastMove = input.next().charAt(0); // record your step for later
+                if (!Input.hasNext()) {System.out.print("Which direction? (N/E/S/W U/D/L/R)\n> ");}
+                lastMove = Input.next().charAt(0); // record your step for later
                 print.println(player.move(lastMove));
                 map[player.getY()][player.getX()] = true; // mark tile as visited
             }
             case 'e', 'c' -> {
                 player.printInventory(); // empty inventory does nothing
                 System.out.printf("Which weapon do you want to equip%s?\n> ", (player.getWeapon() != null) ? ", replacing" + player.getWeapon() : "");
-                if (input.hasNextInt()) {
-                    print.println(player.equip(input.nextInt()));
-                    input.nextLine(); // catch the extra line from nextInt()
-                } else if (input.hasNext()) {
-                    input.next();
+                if (Input.hasNextInt()) {
+                    print.println(player.equip(Input.nextInt()));
+                    Input.nextLine(); // catch the extra line from nextInt()
+                } else if (Input.hasNext()) {
+                    Input.next();
                 }
             }
             case 'u' -> {
                 player.printInventory();
                 System.out.print("Which item do you want to use?\n> ");
-                if (input.hasNextInt()) { // very similar to the above block
-                    print.println(player.useItem(input.nextInt()));
-                    input.nextLine();
-                } else if (input.hasNext()) {
-                    input.next();
+                if (Input.hasNextInt()) { // very similar to the above block
+                    print.println(player.useItem(Input.nextInt()));
+                    Input.nextLine();
+                } else if (Input.hasNext()) {
+                    Input.next();
                 }
             }
             case 'p', 'g' -> { // Lets go GAMBLINGGGGG
@@ -125,9 +126,8 @@ public class Main {
      * Mortal Kombat between the player and any other enemy
      * @param enemy the being that fights the player
      * @param print PrintWriter to log the actions in a file
-     * @param input Scanner to get user input
      */
-    public static void fight (Character enemy, PrintWriter print, Scanner input) {
+    public static void fight (Character enemy, PrintWriter print) {
         int turns = 0;
         print.println(player + " engaged in combat with " + enemy); // yay logs
 
@@ -140,7 +140,7 @@ public class Main {
             int eDmg = (int)(enemy.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
             // player turn
             System.out.print("What do you want to do? (A)ttack, (U)se item, (R)un\n> ");
-            switch (java.lang.Character.toLowerCase(input.next().charAt(0))) {
+            switch (java.lang.Character.toLowerCase(Input.next().charAt(0))) {
                 case 'a' -> {
                     print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather (thanks Keniel for inspiration)
                     System.out.printf("You attack for %d damage\n", pDmg);
@@ -152,11 +152,11 @@ public class Main {
                 case 'u' -> { // same block as in Main.act effectively
                     player.printInventory();
                     System.out.print("Which item do you want to use?\n> ");
-                    if (input.hasNextInt()) {
-                        print.println(player.useItem(input.nextInt()));
-                        input.nextLine();
-                    } else if (input.hasNext()) {
-                        input.next();
+                    if (Input.hasNextInt()) {
+                        print.println(player.useItem(Input.nextInt()));
+                        Input.nextLine();
+                    } else if (Input.hasNext()) {
+                        Input.next();
                     }
                 }
                 case 'r' -> { // move in the reverse of lastMove

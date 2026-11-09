@@ -21,7 +21,7 @@ public class Item {
         this.atk = atk;
     }
 
-    public void use (Character target) {
+    public void use (Player target) {
         // This is to be overridden in subclasses.
         // Weapons will just output some stuff like "you swing your sword"
     }
