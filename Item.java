@@ -23,6 +23,7 @@ public class Item {
 
     public void use (Character target) {
         // This is to be overridden in subclasses.
+        // Weapons will just output some stuff like "you swing your sword"
     }
 
     public boolean isWeapon () {
