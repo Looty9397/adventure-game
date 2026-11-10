@@ -11,7 +11,11 @@ public class Test {
             money = randGame(money);
         }
 
-        System.out.println(new int[]{1, 2}.equals(new int[]{1, 2}));
+        Player i = new Player("hi");
+        i.acquire(new Deather());
+        i.equip(0);
+        i.useWeapon();
+        System.out.println(i.getWeapon().getATK());
     }
 
     public static int randGame (int money) {

@@ -36,6 +36,7 @@ public class Main {
             // A not dead player is an alive player.
             while (!player.isDead()) {
                 printMap();
+                System.out.println(player.getInfo());
                 act(print);
                 if (items[player.getY()][player.getX()] != null) { // pick up item
                     player.acquire(items[player.getY()][player.getX()]);
@@ -60,13 +61,13 @@ public class Main {
      * @param print PrintWriter to log the action in a file
      */
     public static void act (PrintWriter print) {
-        System.out.print("What do you want to do? (M)ove <dir>, (E)quip / (C)hange weapon, (U)se an item, (P)lay a (G)ame, or (Q)uit the game?\n> ");
+        System.out.print("What do you do? (h for help)\n> ");
         //String in = input.next();
         //char action = in.charAt(0);
 
         // ohh fuck i just realized why i have to use java.lang.Character
         // it's becaues i overwrote the plain Character reference
-        switch (java.lang.Character.toLowerCase(Input.next().charAt(0))) {
+        switch (Input.nextChar()) {
             case 'm' -> { // Move
                 if (!Input.hasNext()) {System.out.print("Which direction? (N/E/S/W U/D/L/R)\n> ");}
                 lastMove = Input.next().charAt(0); // record your step for later
@@ -75,10 +76,9 @@ public class Main {
             }
             case 'e', 'c' -> {
                 player.printInventory(); // empty inventory does nothing
-                System.out.printf("Which weapon do you want to equip%s?\n> ", (player.getWeapon() != null) ? ", replacing" + player.getWeapon() : "");
+                System.out.printf("Which weapon do you want to equip %s?\n> ", (player.getWeapon() != null) ? ", replacing" + player.getWeapon() : "");
                 if (Input.hasNextInt()) {
                     print.println(player.equip(Input.nextInt()));
-                    Input.nextLine(); // catch the extra line from nextInt()
                 } else if (Input.hasNext()) {
                     Input.next();
                 }
@@ -88,7 +88,6 @@ public class Main {
                 System.out.print("Which item do you want to use?\n> ");
                 if (Input.hasNextInt()) { // very similar to the above block
                     print.println(player.useItem(Input.nextInt()));
-                    Input.nextLine();
                 } else if (Input.hasNext()) {
                     Input.next();
                 }
@@ -99,7 +98,12 @@ public class Main {
             case 'q' -> {
                 die(print); // exit the program + kill the player so the main loop (while (!player.isDead())) ends
             }
+            case 'h' -> {
+                System.out.println("Help:\n|   (M)ove <dir>\n|   (E)quip / (C)hange weapon\n|   (U)se an item\n|   (P)lay a (G)ame\n|   (Q)uit the game\n|   get (H)elp");
+                print.println("Accessed the help menu");
+            }
         }
+        System.out.println();
     }
 
     /**
@@ -141,22 +145,20 @@ public class Main {
             int pDmg = (int)(player.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
             int eDmg = (int)(enemy.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
             // player turn
-            System.out.print("What do you want to do? (A)ttack, (U)se item, (R)un\n> ");
-            switch (java.lang.Character.toLowerCase(Input.next().charAt(0))) {
+            System.out.print("What do you do? (h for help)\n> ");
+            switch (Input.nextChar()) {
                 case 'a' -> {
+                    System.out.println();
                     print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather (thanks Keniel for inspiration)
-                    System.out.printf("You attack for %d damage\n", pDmg);
-                    System.out.printf("%s now has %d/%d hp\n", enemy.toString(), enemy.getHP() - pDmg, enemy.getMaxHP());
-                    print.printf("%s attacks for %d damage\n", player.toString(), pDmg);
-                    print.printf("%s now has %d/%d hp\n", enemy.toString(), enemy.getHP() - pDmg, enemy.getMaxHP());
                     enemy.setHP(enemy.getHP() - pDmg);
+                    System.out.printf("You attack for %d damage: %s now has %d/%d hp\n", pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
+                    print.printf("%s attacks for %d damage: %s now has %d/%d hp\n", player, pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
                 }
                 case 'u' -> { // same block as in Main.act effectively
                     player.printInventory();
                     System.out.print("Which item do you want to use?\n> ");
                     if (Input.hasNextInt()) {
                         print.println(player.useItem(Input.nextInt()));
-                        Input.nextLine();
                     } else if (Input.hasNext()) {
                         Input.next();
                     }
@@ -173,6 +175,9 @@ public class Main {
                     print.println(player + " ran from the fight");
                     return;
                 }
+                case 'h' -> {
+                    System.out.println("Help:\n|   (A)ttack\n|   (U)se item\n|   (R)un\n|   get (H)elp");
+                }
                 default -> { // L you typed the wrong thing
                     System.out.println("You do nothing");
                     print.println(player + " did nothing");
@@ -180,19 +185,15 @@ public class Main {
             }
             // enemy turn
             if (!enemy.isDead() && !player.isDead()) { // checks for player because Pill can insta-kill on player's turn
-                System.out.printf("%s attacks you for %d damage\n", enemy.toString(), eDmg);
-                System.out.printf("You now have %d/%d hp\n", player.getHP() - eDmg, player.getMaxHP());
-                print.printf("%s attacks %s for %d damage\n", enemy.toString(), player.toString(), eDmg);
-                print.printf("%s now has %d/%d hp\n", player.toString(), player.getHP() - eDmg, player.getMaxHP());
                 player.setHP(player.getHP() - eDmg);
+                System.out.printf("%s attacks you for %d damage: you now have %d/%d hp\n", enemy, eDmg, player.getHP(), player.getMaxHP());
+                print.printf("%s attacks %s for %d damage: %s now has %d/%d hp\n", enemy, player, eDmg, player, player.getHP(), player.getMaxHP());
             }
         }
         if (enemy.isDead()) {
             int reward = (int)((enemy.getMaxHP() / 2) * Math.pow(turns, 1.5));
-            System.out.printf("%s has died\nYou have won the fight\n", enemy.toString());
-            System.out.println("You received $" + reward + " in spoils");
-            print.printf("%s has died\n%s has won the fight\n", enemy.toString(), player.toString());
-            print.printf("%s received $%d in spoils\n", player.toString(), reward);
+            System.out.printf("You have won the fight and received $%d in spoils\n", reward);
+            print.printf("%s has won the fight and received $%d in spoils\n", player, reward);
             player.addMoney(reward);
 
             // remove the enemy from the map
@@ -206,6 +207,10 @@ public class Main {
      * Generate the map
      */
     public static void setup () {
+        // NOTE: Clearly I'm a fucking idiot because I put INTEGER DIVISION for each conditional
+        // so a lot of stuff just went to 0% because of TRUNCATION
+        // Thank you to ChatGPT for pointing this out to me
+
         // Spawn monsters
         // ALL MONSTERS:
         //     Tank: Orc, Wolf, Golem
@@ -226,10 +231,10 @@ public class Main {
                         } else {
                             enemies[i][j] = new Character("Bandit", 75, 6, "A Bandit appears behind you"); // hes human so tankier
                         }
-                    } else if (typeSeed < (5 / 6)) { // 1/3 for this, 1/6 for the next
-                        if (specSeed < (4 / 9)) {
+                    } else if (typeSeed < (5.0 / 6)) { // 1/3 for this, 1/6 for the next
+                        if (specSeed < (4.0 / 9)) {
                             enemies[i][j] = new Character("Wolf", 150, 4, "A snarling Wolf bounds onto the road");
-                        } else if (specSeed < (7 / 9)) {
+                        } else if (specSeed < (7.0 / 9)) {
                             enemies[i][j] = new Character("Orc", 250, 3, "A lone Orc lumbers towards you");
                         } else {
                             enemies[i][j] = new Character("Golem", 500, 2, "A massive Golem impedes your advance");
@@ -266,12 +271,12 @@ public class Main {
                 } else if (Math.random() < 0.25) { // one in four chance given not a deather or deathernote
                     double typeSeed = Math.random();
                     double specSeed = Math.random();
-                    if (typeSeed < (1 / 3)) { // (1 / 3) - 0 = 33.33...% chance
+                    if (typeSeed < (1.0 / 3)) { // (1 / 3) - 0 = 33.33...% chance
                         // 20% for Large, 80% for Small or nothing
                         // in order for the overall chance of Small to be 20%, 0.2*(1/0.8) = 0.25, it should be 25%
                         items[i][j] = new Item(((Math.random() < 0.2) ? "Large " : ((Math.random() < 0.25) ? "Small " : "")) + ((Math.random() < 0.5) ? "Stick" : "Rock"));
-                    } else if (typeSeed < (5 / 6)) { // (5 / 6) - (1 / 3) = 50% chance
-                        if (specSeed < (1 / 2)) {
+                    } else if (typeSeed < (5.0 / 6)) { // (5 / 6) - (1 / 3) = 50% chance
+                        if (specSeed < 0.5) {
                             String[] names = {"Bread", "Apple", "Steak", "Carrot", "Golden Apple"};
                             int[] saturation = {5, 2, 8, 1, 15};
                             int index = (int)(Math.random() * names.length);
@@ -300,9 +305,9 @@ public class Main {
                             index = 5;
                         }
 
-                        if (specSeed < (1 / 3)) {
+                        if (specSeed < (1.0 / 3)) {
                             items[i][j] = new Sword(types[index], atks[index] + 2);
-                        } else if (specSeed < (2 / 3)) {
+                        } else if (specSeed < (2.0 / 3)) {
                             items[i][j] = new Spear(types[index], atks[index]);
                         } else {
                             items[i][j] = new Shovel(types[index], atks[index] - 1);

@@ -48,6 +48,10 @@ public class Character {
         return this.maxHP;
     }
 
+    public void setMaxHP (int val) {
+        this.maxHP = val;
+    }
+
     public int getSTR () {
         return this.str;
     }
@@ -68,24 +72,12 @@ public class Character {
         }
     }
 
-    /**
-     * heal some damage
-     * @param val
-     */
-    public void heal (int val) {
-        if (this.hp + val > this.maxHP) {
-            this.hp = maxHP;
-        } else {
-            this.hp += val;
-        }
-    }
-
     public boolean isDead () {
         return this.hp <= 0;
     }
 
     @Override 
     public String toString () {
-        return String.format("%s: %d/%dhp", this.name, this.hp, this.maxHP);
+        return this.name;
     }
 }

@@ -12,7 +12,8 @@ public class Input {
     }
 
     public static String nextLine () {
-        return input.nextLine().toLowerCase();
+        // not formatted because this is used for Player name, which would be wierd
+        return input.nextLine();
     }
 
     public static int nextInt () {
@@ -22,7 +23,7 @@ public class Input {
     }
 
     public static char nextChar () {
-        return next().toLowerCase().charAt(0);
+        return next().charAt(0);
     }
 
     public static boolean hasNext () {

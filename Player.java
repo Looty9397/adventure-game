@@ -101,8 +101,12 @@ public class Player extends Character {
         } else if (this.inventory.get(val).isConsumable()) { // nor can you fight with spaghetti
             System.out.println("Cannot equip a consumable item");
             return this.getName() + " tried to equip a consumable item";
+        } else if (!this.inventory.get(val).isWeapon()) { // nor can you fight with paper
+            System.out.println("Cannot equip something that is not a weapon");
+            return this.getName() + " tried to equip something that is not a weapon";
         } else {
             Item temp = this.inventory.get(val).copy(); // to prevent weird stuff with memory
+            // ChatGPT helped at this point since .copy() is not overridden, this would nullify the subclass overrides.
             if (this.weapon == null) {
                 this.inventory.remove(val);
             } else {
@@ -147,6 +151,7 @@ public class Player extends Character {
         }
 
         this.heal(1); // passive regen
+        // NOTE: this passive regen CANNOT increase the max hp because the formula is (maxhp + (hp + heal)) / 2 and so the 1/2 gets truncated
         return this.getName() + " moved in direction " + java.lang.Character.toUpperCase(dir);
     }
 
@@ -184,7 +189,7 @@ public class Player extends Character {
             // because only you can be targetted by them
             // and why would you kill yourself
             // just a bad idea
-            String out = String.format("%s used the%s item %s\n", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
+            String out = String.format("%s used the%s item %s", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
             // prepping a output string beforehand because it might not exist anymore when returning the log str
             if (this.inventory.get(val).isConsumable()) {
                 discard(val); // oopsie daisy you consumed the consumable
@@ -202,5 +207,26 @@ public class Player extends Character {
             this.weapon.use(this); // might be some flavor text in the output, or something else entirely (DEATHER)
         }
         return this.getName() + " used their weapon " + this.weapon;
+    }
+
+    /**
+     * heal some damage, overheal increases your max hp
+     * @param val
+     */
+    public void heal (int val) {
+        if (this.getHP() + val > this.getMaxHP()) {
+            this.setMaxHP((this.getMaxHP() + (this.getHP() + val)) / 2);
+            this.setHP(this.getMaxHP());
+        } else {
+            this.setHP(this.getHP() + val);
+        }
+    }
+
+    /**
+     * quick little string method
+     * @return player hp and money
+     */
+    public String getInfo () {
+        return String.format("%s %d/%d hp $%d", this, this.getHP(), this.getMaxHP(), this.money);
     }
 }
