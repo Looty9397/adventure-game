@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+// Academic Integrity Pledge is in README.md
 
 public class Main {
     private static Player player;
@@ -9,58 +10,58 @@ public class Main {
     private static char lastMove; // the last direction you moved in
 
     public static void main(String[] args) {
-        File f = new File("log.txt");
-        if (!f.exists()) { // Make sure the file is created
-            try { // Or, at least make sure its blank
-                f.createNewFile();
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        } else {
-            try (PrintWriter print = new PrintWriter(f)) {
-                print.print(""); // Clear the file
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        }
+        Output print = new Output("log.txt"); // logs will have timestamps now
+        // Note that essentially every action done in the program is with a method that returns a string.
+        // this is to make logging the stuff easy, the output goes straight into the PrintWriter.
+        System.out.print("Enter your name:\n> ");
+        player = new Player(Input.nextLine());
+        setup();
 
-        // ChatGPT was used here to correct NoSuchElementException
-        // new FileWriter(f, true) makes it be in append mode so its not just continuously overwriting.
-        try (PrintWriter print = new PrintWriter(new FileWriter(f, true))) {
-            // Note that essentially every action done in the program is with a method that returns a string.
-            // this is to make logging the stuff easy, the output goes straight into the PrintWriter.
-            System.out.print("Enter your name:\n> ");
-            player = new Player(Input.nextLine());
-            setup();
+        //for (Character[] i: enemies) {for (Character j: i) {if (j != null) {System.out.println(j.getName());}}}
 
-            // A not dead player is an alive player.
-            while (!player.isDead()) {
-                printMap();
-                System.out.println(player.getInfo());
-                act(print);
-                if (items[player.getY()][player.getX()] != null) { // pick up item
-                    player.acquire(items[player.getY()][player.getX()]);
-                    System.out.println("You picked up " + items[player.getY()][player.getX()]);
-                    print.println(player.getName() + " picked up " + items[player.getY()][player.getX()]);
-                    items[player.getY()][player.getX()] = null;
+        // A not dead player is an alive player.
+        while (!player.isDead()) {
+            printMap();
+            System.out.println(player.getInfo());
+            act(print);
+            if (items[player.getY()][player.getX()] != null) { // pick up item
+                player.acquire(items[player.getY()][player.getX()]);
+                System.out.println("You picked up " + items[player.getY()][player.getX()]);
+                print.println(player.getName() + " picked up " + items[player.getY()][player.getX()]);
+                items[player.getY()][player.getX()] = null;
+            }
+            if (enemies[player.getY()][player.getX()] != null) { // fight, after item
+                fight(enemies[player.getY()][player.getX()], print);
+            }
+            // check if there's nothing left to do, if there is then break the loop
+            boolean stuff = false;
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    stuff = (!map[i][j] || enemies[i][j] != null);
+                    if (stuff) { // if not everywhere has been explored or monsters still exist
+                        break; // skip the die(print) which would end the game
+                    }
                 }
-                if (enemies[player.getY()][player.getX()] != null) { // fight, after item
-                    fight(enemies[player.getY()][player.getX()], print);
+                if (stuff) {
+                    break;
                 }
             }
-            // When the player dies or quits the game, the loop exits and the code ends, letting all the output go to log.txt
-            // in the case that it doesn't, output something useless that can be cut off
-            print.println("ENDOFFILE");
-        } catch (IOException ex) {
-            System.out.println(ex);
+            if (!stuff) { // if not stuff to do
+                System.out.println("You see nothing else to do: congratulations, you have won");
+                die(print);
+            }
         }
+        // When the player dies or quits the game, the loop exits and the code ends, letting all the output go to log.txt
+        // in the case that it doesn't, output something useless that can be cut off
+        // hopefully this works
+        print.close(); // pls work (IT DOES)
     }
 
     /**
      * Have the player perform an action
      * @param print PrintWriter to log the action in a file
      */
-    public static void act (PrintWriter print) {
+    public static void act (Output print) {
         System.out.print("What do you do? (h for help)\n> ");
         //String in = input.next();
         //char action = in.charAt(0);
@@ -101,9 +102,41 @@ public class Main {
                 System.out.println("Help:\n|   (M)ove (N/E/S/W U/D/L/R)\n|   (E)quip / (C)hange weapon\n|   (U)se an item\n|   (P)lay a (G)ame\n|   (Q)uit the game\n|   get (H)elp");
                 print.println("Accessed the help menu");
             }
+            case 'd' -> { // hidden dev commands, will remain in the game but NOT accessible to the player
+                switch (Input.nextChar()) {
+                    case 'k' -> { // "killall"
+                        for (Character[] i : enemies) { // arrays hold reference to object
+                            for (int j = 0; j < i.length; j++) {
+                                i[j] = null;
+                            }
+                        }
+                    }
+                    case 'g' -> { // "give"
+                        player.acquire(new DeatherNote());
+                        player.acquire(new Deather());
+                        player.acquire(new Sword("Dev", 15));
+                        player.acquire(new Spear("Dev", 13));
+                        player.acquire(new Shovel("Dev", 12));
+                        player.acquire(new Food("Dev Apple", 50));
+                        player.acquire(new Card(-100));
+                        player.acquire(new Card(100));
+                        player.acquire(new Pill());
+                    }
+                    case 'p' -> { // "pickup"
+                        for (Item[] i: items) {
+                            for (int j = 0; j < i.length; j++) {
+                                if (i[j] != null) {
+                                    player.acquire(i[j]);
+                                    i[j] = null;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         if (player.isDead()) { // failed Pill use, only possible situation
-            print.printf("%s swallowed the pill and immediately died\n", player);
+            print.println(String.format("%s swallowed the pill and immediately died", player));
             die(print);
         }
         System.out.println();
@@ -136,7 +169,7 @@ public class Main {
      * @param enemy the being that fights the player
      * @param print PrintWriter to log the actions in a file
      */
-    public static void fight (Character enemy, PrintWriter print) {
+    public static void fight (Character enemy, Output print) {
         int turns = 0;
         print.println(player + " engaged in combat with " + enemy); // yay logs
 
@@ -152,9 +185,10 @@ public class Main {
                     System.out.println();
                     print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather
                     int pDmg = (int)(player.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
+                    // ^ calculated here instead of before so that the changes from weapon.use() will apply
                     enemy.setHP(enemy.getHP() - pDmg);
                     System.out.printf("You attack for %d damage: %s now has %d/%d hp\n", pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
-                    print.printf("%s attacks for %d damage: %s now has %d/%d hp\n", player, pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
+                    print.println(String.format("%s attacks for %d damage: %s now has %d/%d hp", player, pDmg, enemy, enemy.getHP(), enemy.getMaxHP()));
                 }
                 case 'u' -> { // same block as in Main.act effectively
                     player.printInventory();
@@ -179,6 +213,7 @@ public class Main {
                 }
                 case 'h' -> {
                     System.out.println("Help:\n|   (A)ttack\n|   (U)se item\n|   (R)un\n|   get (H)elp");
+                    turns--; // without this you could spam 'h' to get infinite attack damage
                     continue;
                 }
                 default -> { // L you typed the wrong thing
@@ -191,13 +226,13 @@ public class Main {
                 int eDmg = (int)(enemy.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
                 player.setHP(player.getHP() - eDmg);
                 System.out.printf("%s attacks you for %d damage: you now have %d/%d hp\n", enemy, eDmg, player.getHP(), player.getMaxHP());
-                print.printf("%s attacks %s for %d damage: %s now has %d/%d hp\n", enemy, player, eDmg, player, player.getHP(), player.getMaxHP());
+                print.println(String.format("%s attacks %s for %d damage: %s now has %d/%d hp", enemy, player, eDmg, player, player.getHP(), player.getMaxHP()));
             }
         }
         if (enemy.isDead()) {
             int reward = (int)((enemy.getMaxHP() / 2) * Math.pow(turns, 1.5));
             System.out.printf("You have won the fight and received $%d in spoils\n", reward);
-            print.printf("%s has won the fight and received $%d in spoils\n", player, reward);
+            print.println(String.format("%s has won the fight and received $%d in spoils", player, reward));
             player.addMoney(reward);
 
             // remove the enemy from the map
@@ -211,9 +246,9 @@ public class Main {
      * Generate the map
      */
     public static void setup () {
-        // NOTE: Clearly I'm a fucking idiot because I put INTEGER DIVISION for each conditional
+        // I'm a fucking idiot, I put INTEGER DIVISION for each conditional
         // so a lot of stuff just went to 0% because of TRUNCATION
-        // Thank you to ChatGPT for pointing this out to me
+        // I had to have ChatGPT tell me this :sob:
 
         // Spawn monsters
         // ALL MONSTERS:
@@ -286,7 +321,7 @@ public class Main {
                             int[] saturation = {5, 3, 8, 2, 15};
                             int index = (int)(Math.random() * names.length);
                             items[i][j] = new Food(names[index], saturation[index]);
-                        } else if (specSeed < (2 / 3)) { // 2/3 - 1/2 = 1/6
+                        } else if (specSeed < (2.0 / 3)) { // 2/3 - 1/2 = 1/6
                             items[i][j] = new Card((int)(Math.random() * 21) - 10);
                         } else { // 1 - (2/3) = 1/3
                             items[i][j] = new Pill();
@@ -347,7 +382,7 @@ public class Main {
      * peacefully kill off the player
      * @param print PrintWriter to log in the file
      */
-    public static void die (PrintWriter print) {
+    public static void die (Output print) {
         System.out.println();
 
         // read the stats
@@ -364,7 +399,7 @@ public class Main {
 
         // display stats
         System.out.println("You completed a total of " + actions + " actions");
-        System.out.println("You had $" + player.getMoney() + " when you " + ((player.isDead()) ? "died" : "quit"));
+        System.out.println("You ended with $" + player.getMoney());
 
         // thanks for playing
         if (player.isDead()) {
@@ -425,7 +460,10 @@ public class Main {
                 player.loseMoney(player.getMoney());
             }
             System.out.printf("You rolled %s, and you %dx'ed your money\nYou now have $%d\n", Arrays.toString(original), earnings, player.getMoney());
-            return String.format("%s rolled %s, and %dx'ed their money\n%s now has $%d", player.getName(), Arrays.toString(original), earnings, player.getName(), player.getMoney());
+            if (player.getMoney() < 0) {
+                System.out.println("You became too greedy, as punishment you have lost all your money");
+            }
+            return String.format("%s rolled %s, and %dx'ed their money\n%s now has $%d%s", player.getName(), Arrays.toString(original), earnings, player.getName(), player.getMoney(), (player.getMoney() < 0) ? " because of greed" : "");
         }
     }
 }

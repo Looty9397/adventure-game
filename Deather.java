@@ -34,6 +34,7 @@ public class Deather extends Item {
         return super.getATK() + ((success) ? 50 : 0);
     }
 
+    // Each weapon needs this to preserve the overrides when equipping
     @Override
     public Deather copy () {
         return new Deather();

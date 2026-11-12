@@ -14,6 +14,7 @@ public class Sword extends Item {
         System.out.println("You swing your " + this.getName() + " with fury");
     }
 
+    // Each weapon needs this to preserve the overrides when equipping
     @Override
     public Sword copy () {
         return new Sword(this.type, this.getATK());

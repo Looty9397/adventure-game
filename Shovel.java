@@ -14,6 +14,7 @@ public class Shovel extends Item {
         System.out.println("Your " + this.getName() + " flashes in your hand");
     }
 
+    // Each weapon needs this to preserve the overrides when equipping
     @Override
     public Shovel copy () {
         return new Shovel(this.type, this.getATK());

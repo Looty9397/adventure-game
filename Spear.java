@@ -14,6 +14,7 @@ public class Spear extends Item {
         System.out.println("You thrust your " + this.getName() + " at your opponent");
     }
 
+    // Each weapon needs this to preserve the overrides when equipping
     @Override
     public Spear copy () {
         return new Spear(this.type, this.getATK());
