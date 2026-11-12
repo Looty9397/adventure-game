@@ -5,7 +5,7 @@ public class Deather extends Item {
     private boolean success;
 
     public Deather () {
-        super("Deather", false, true, 1);
+        super("Deather", true, 1);
     }
 
     @Override

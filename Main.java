@@ -69,14 +69,13 @@ public class Main {
         // it's becaues i overwrote the plain Character reference
         switch (Input.nextChar()) {
             case 'm' -> { // Move
-                if (!Input.hasNext()) {System.out.print("Which direction? (N/E/S/W U/D/L/R)\n> ");}
                 lastMove = Input.next().charAt(0); // record your step for later
                 print.println(player.move(lastMove));
                 map[player.getY()][player.getX()] = true; // mark tile as visited
             }
             case 'e', 'c' -> {
                 player.printInventory(); // empty inventory does nothing
-                System.out.printf("Which weapon do you want to equip %s?\n> ", (player.getWeapon() != null) ? ", replacing" + player.getWeapon() : "");
+                System.out.printf("Which weapon do you want to equip%s?\n> ", (player.getWeapon() != null) ? ", replacing " + player.getWeapon() : "");
                 if (Input.hasNextInt()) {
                     print.println(player.equip(Input.nextInt()));
                 } else if (Input.hasNext()) {
@@ -99,9 +98,13 @@ public class Main {
                 die(print); // exit the program + kill the player so the main loop (while (!player.isDead())) ends
             }
             case 'h' -> {
-                System.out.println("Help:\n|   (M)ove <dir>\n|   (E)quip / (C)hange weapon\n|   (U)se an item\n|   (P)lay a (G)ame\n|   (Q)uit the game\n|   get (H)elp");
+                System.out.println("Help:\n|   (M)ove (N/E/S/W U/D/L/R)\n|   (E)quip / (C)hange weapon\n|   (U)se an item\n|   (P)lay a (G)ame\n|   (Q)uit the game\n|   get (H)elp");
                 print.println("Accessed the help menu");
             }
+        }
+        if (player.isDead()) { // failed Pill use, only possible situation
+            print.printf("%s swallowed the pill and immediately died\n", player);
+            die(print);
         }
         System.out.println();
     }
@@ -142,14 +145,13 @@ public class Main {
             turns++; // RNG IS KEYYYY
             // More turns = more damage
             // harder fight = more reward
-            int pDmg = (int)(player.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
-            int eDmg = (int)(enemy.getSTR() * Math.pow(turns, 1.5) * ((Math.random() * 0.5) + 0.5));
             // player turn
             System.out.print("What do you do? (h for help)\n> ");
             switch (Input.nextChar()) {
                 case 'a' -> {
                     System.out.println();
-                    print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather (thanks Keniel for inspiration)
+                    print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather
+                    int pDmg = (int)(player.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
                     enemy.setHP(enemy.getHP() - pDmg);
                     System.out.printf("You attack for %d damage: %s now has %d/%d hp\n", pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
                     print.printf("%s attacks for %d damage: %s now has %d/%d hp\n", player, pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
@@ -177,6 +179,7 @@ public class Main {
                 }
                 case 'h' -> {
                     System.out.println("Help:\n|   (A)ttack\n|   (U)se item\n|   (R)un\n|   get (H)elp");
+                    continue;
                 }
                 default -> { // L you typed the wrong thing
                     System.out.println("You do nothing");
@@ -185,6 +188,7 @@ public class Main {
             }
             // enemy turn
             if (!enemy.isDead() && !player.isDead()) { // checks for player because Pill can insta-kill on player's turn
+                int eDmg = (int)(enemy.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
                 player.setHP(player.getHP() - eDmg);
                 System.out.printf("%s attacks you for %d damage: you now have %d/%d hp\n", enemy, eDmg, player.getHP(), player.getMaxHP());
                 print.printf("%s attacks %s for %d damage: %s now has %d/%d hp\n", enemy, player, eDmg, player, player.getHP(), player.getMaxHP());
@@ -257,6 +261,7 @@ public class Main {
             {(int)(Math.random() * map.length), (int)(Math.random() * map.length)} //  Deather
         };
 
+        // make sure that the two items are not at the same position
         while (Arrays.compare(deatherPos[0], deatherPos[1]) == 0) {
             // no need to shuffle the other, it's position is good as is
             deatherPos[1] = new int[]{(int)(Math.random() * map.length), (int)(Math.random() * map.length)};
@@ -278,7 +283,7 @@ public class Main {
                     } else if (typeSeed < (5.0 / 6)) { // (5 / 6) - (1 / 3) = 50% chance
                         if (specSeed < 0.5) {
                             String[] names = {"Bread", "Apple", "Steak", "Carrot", "Golden Apple"};
-                            int[] saturation = {5, 2, 8, 1, 15};
+                            int[] saturation = {5, 3, 8, 2, 15};
                             int index = (int)(Math.random() * names.length);
                             items[i][j] = new Food(names[index], saturation[index]);
                         } else if (specSeed < (2 / 3)) { // 2/3 - 1/2 = 1/6
@@ -343,6 +348,8 @@ public class Main {
      * @param print PrintWriter to log in the file
      */
     public static void die (PrintWriter print) {
+        System.out.println();
+
         // read the stats
         int actions = 0;
         File f = new File("log.txt");
@@ -418,7 +425,7 @@ public class Main {
                 player.loseMoney(player.getMoney());
             }
             System.out.printf("You rolled %s, and you %dx'ed your money\nYou now have $%d\n", Arrays.toString(original), earnings, player.getMoney());
-            return String.format("%s rolled %s, and %dx'ed their money\n%s now has $%d\n", player.getName(), Arrays.toString(original), earnings, player.getName(), player.getMoney());
+            return String.format("%s rolled %s, and %dx'ed their money\n%s now has $%d", player.getName(), Arrays.toString(original), earnings, player.getName(), player.getMoney());
         }
     }
 }

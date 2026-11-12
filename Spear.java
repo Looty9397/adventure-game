@@ -5,7 +5,7 @@ public class Spear extends Item {
     private final String type;
 
     public Spear (String type, int atk) {
-        super(type + " Spear", false, true, atk);
+        super(type + " Spear", true, atk);
         this.type = type;
     }
 

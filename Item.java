@@ -14,12 +14,13 @@ public class Item {
 
     public Item (String name, boolean consumable) {
         // default not weapon
-        this(name, consumable, false, 0);
+        this(name, false, 0);
+        this.consumable = consumable;
     }
 
-    public Item (String name, boolean consumable, boolean weapon, int atk) {
+    public Item (String name, boolean weapon, int atk) {
         this.name = name;
-        this.consumable = consumable;
+        this.consumable = false;
         this.weapon = weapon;
         this.atk = atk;
     }
@@ -53,6 +54,12 @@ public class Item {
     }
 
     public Item copy () {
-        return new Item(this.name, this.consumable, this.weapon, this.atk);
+        if (this.weapon) {
+            return new Item(this.name, this.weapon, this.atk);
+        } else if (this.consumable) {
+            return new Item(this.name, this.consumable);
+        } else {
+            return new Item(this.name);
+        }
     }
 }

@@ -5,7 +5,7 @@ public class Sword extends Item {
     private final String type;
 
     public Sword (String type, int atk) {
-        super(type + " Sword", false, true, atk);
+        super(type + " Sword", true, atk);
         this.type = type;
     }
 

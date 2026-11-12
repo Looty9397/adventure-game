@@ -5,7 +5,7 @@ public class Shovel extends Item {
     private final String type;
 
     public Shovel (String type, int atk) {
-        super(type + " Shovel", false, true, atk);
+        super(type + " Shovel", true, atk);
         this.type = type;
     }
 
