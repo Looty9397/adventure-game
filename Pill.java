@@ -18,8 +18,9 @@ public class Pill extends Item {
             target.heal(healAmt);
             System.out.println("You swallowed the pill and healed " + healAmt + " hp");
         } else {
-            target.setHP(0);
-            System.out.println("You swallowed the pill and immediately died");
+            target.setHP(1);
+            System.out.println("You swallowed the pill and almost died");
+            // unfortunately can't seem to make this also print to the log file, too bad so sad
         }
     }
 }

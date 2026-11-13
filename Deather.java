@@ -26,6 +26,11 @@ public class Deather extends Item {
         } else {
             success = false;
         }
+        if (!success) {
+            int dmg = target.getMaxHP() / 7;
+            target.setHP(target.getHP() - dmg);
+            System.out.println("You have misspoke: the angered Deather has taken " + dmg + " hp from you");
+        }
     }
 
     @Override

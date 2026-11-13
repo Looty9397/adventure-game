@@ -85,7 +85,7 @@ public class Player extends Character {
     public void printInventory () {
         for (int i = 0; i < this.inventory.size(); i++) {
             // #. item
-            System.out.printf("%d. %s\n", i, this.inventory.get(i).toString());
+            System.out.printf("%d. %s\n", i, this.inventory.get(i));
         }
     }
 
@@ -151,7 +151,8 @@ public class Player extends Character {
         }
 
         this.heal(1); // passive regen
-        // NOTE: this passive regen CANNOT increase the max hp because the formula is (maxhp + (hp + heal)) / 2 and so the 1/2 gets truncated
+        // ~~NOTE: this passive regen CANNOT increase the max hp because the formula is (maxhp + (hp + heal)) / 2 and so the 1/2 gets truncated~~
+        // THIS DOES INCREASE MAX HP
         return this.getName() + " moved in direction " + java.lang.Character.toUpperCase(dir);
     }
 
@@ -189,7 +190,7 @@ public class Player extends Character {
             // because only you can be targetted by them
             // and why would you kill yourself
             // just a bad idea
-            String out = String.format("%s used the%s item %s", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val).toString());
+            String out = String.format("%s used the%s item %s", this.getName(), (this.inventory.get(val).isConsumable()) ? " consumable" : "", this.inventory.get(val));
             // prepping a output string beforehand because it might not exist anymore when returning the log str
             if (this.inventory.get(val).isConsumable()) {
                 discard(val); // oopsie daisy you consumed the consumable
@@ -215,7 +216,11 @@ public class Player extends Character {
      */
     public void heal (int val) {
         if (this.getHP() + val > this.getMaxHP()) {
-            this.setMaxHP((this.getMaxHP() + (this.getHP() + val)) / 2);
+            this.setMaxHP((this.getMaxHP() + (this.getHP() + val) + 1) / 2);
+            // +1 is there so that walking can buf your maxHP
+            // (50 + 51) / 2 = 50(.5)
+            // (50 + 51 + 1) / 2 = 51
+            // (50 + 52 + 1) / 2 = 51(.5)
             this.setHP(this.getMaxHP());
         } else {
             this.setHP(this.getHP() + val);
@@ -228,5 +233,12 @@ public class Player extends Character {
      */
     public String getInfo () {
         return String.format("%s %d/%d hp $%d", this, this.getHP(), this.getMaxHP(), this.money);
+    }
+
+    /**
+     * clear inventory
+     */
+    public void clearInv () {
+        this.inventory.clear();
     }
 }

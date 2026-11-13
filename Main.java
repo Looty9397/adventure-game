@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.*;
 // Academic Integrity Pledge is in README.md
+// ADD: mutual .attack() so can track total damage dealt/taken
+//      final attack when you run
 
 public class Main {
     private static Player player;
-    private static final boolean[][] map = new boolean[10][10]; // whether or not the player has visited
-    private static final Character[][] enemies = new Character[10][10]; // all enemies on the map
-    private static final Item[][] items = new Item[10][10]; // all items on the map
+    private static final boolean[][] map = new boolean[10][20]; // whether or not the player has visited
+    private static final Character[][] enemies = new Character[10][20]; // all enemies on the map
+    private static final Item[][] items = new Item[10][20]; // all items on the map
     private static char lastMove; // the last direction you moved in
 
     public static void main(String[] args) {
@@ -102,16 +104,16 @@ public class Main {
                 System.out.println("Help:\n|   (M)ove (N/E/S/W U/D/L/R)\n|   (E)quip / (C)hange weapon\n|   (U)se an item\n|   (P)lay a (G)ame\n|   (Q)uit the game\n|   get (H)elp");
                 print.println("Accessed the help menu");
             }
-            case 'd' -> { // hidden dev commands, will remain in the game but NOT accessible to the player
+            case 'd' -> { // hidden dev commands, will remain in the game but NOT visible to the player
                 switch (Input.nextChar()) {
-                    case 'k' -> { // "killall"
+                    case 'k' -> { // "kill all"
                         for (Character[] i : enemies) { // arrays hold reference to object
                             for (int j = 0; j < i.length; j++) {
                                 i[j] = null;
                             }
                         }
                     }
-                    case 'g' -> { // "give"
+                    case 'g' -> { // "give all"
                         player.acquire(new DeatherNote());
                         player.acquire(new Deather());
                         player.acquire(new Sword("Dev", 15));
@@ -122,7 +124,7 @@ public class Main {
                         player.acquire(new Card(100));
                         player.acquire(new Pill());
                     }
-                    case 'p' -> { // "pickup"
+                    case 'p' -> { // "pickup all"
                         for (Item[] i: items) {
                             for (int j = 0; j < i.length; j++) {
                                 if (i[j] != null) {
@@ -132,12 +134,30 @@ public class Main {
                             }
                         }
                     }
+                    case 'v' -> { // "visit all"
+                        for (boolean[] i: map) {
+                            for (int j = 0; j < i.length; j++) {
+                                i[j] = true;
+                            }
+                        }
+                    }
+                    case 'l' -> { // "locate all"
+                        for (int i = 0; i < map.length; i++) {
+                            for (int j = 0; j < map[i].length; j++) {
+                                if (enemies[i][j] != null) {
+                                    System.out.println(String.format("%s at (%d, %d)", enemies[i][j], j + 1, i + 1));
+                                }
+                                if (items[i][j] != null) {
+                                    System.out.println(String.format("%s at (%d, %d)", items[i][j], j + 1, i + 1));
+                                }
+                            }
+                        }
+                    }
+                    case 'c' -> { // "clear inventory"
+                        player.clearInv();
+                    }
                 }
             }
-        }
-        if (player.isDead()) { // failed Pill use, only possible situation
-            print.println(String.format("%s swallowed the pill and immediately died", player));
-            die(print);
         }
         System.out.println();
     }
@@ -311,14 +331,14 @@ public class Main {
                 } else if (Math.random() < 0.25) { // one in four chance given not a deather or deathernote
                     double typeSeed = Math.random();
                     double specSeed = Math.random();
-                    if (typeSeed < (1.0 / 3)) { // (1 / 3) - 0 = 33.33...% chance
+                    if (typeSeed < (1.0 / 6)) { // (1 / 6) - 0 = 16.66...% chance
                         // 20% for Large, 80% for Small or nothing
                         // in order for the overall chance of Small to be 20%, 0.2*(1/0.8) = 0.25, it should be 25%
                         items[i][j] = new Item(((Math.random() < 0.2) ? "Large " : ((Math.random() < 0.25) ? "Small " : "")) + ((Math.random() < 0.5) ? "Stick" : "Rock"));
-                    } else if (typeSeed < (5.0 / 6)) { // (5 / 6) - (1 / 3) = 50% chance
+                    } else if (typeSeed < (4.0 / 6)) { // (4 / 6) - (1 / 6) = 50% chance
                         if (specSeed < 0.5) {
-                            String[] names = {"Bread", "Apple", "Steak", "Carrot", "Golden Apple"};
-                            int[] saturation = {5, 3, 8, 2, 15};
+                            String[] names = {"Carrot", "Bread", "Baked Potato", "Golden Carrot", "Steak", "Golden Apple", "God Apple"};
+                            int[] saturation = {2, 3, 6, 8, 10, 15, 25};
                             int index = (int)(Math.random() * names.length);
                             items[i][j] = new Food(names[index], saturation[index]);
                         } else if (specSeed < (2.0 / 3)) { // 2/3 - 1/2 = 1/6
@@ -326,7 +346,7 @@ public class Main {
                         } else { // 1 - (2/3) = 1/3
                             items[i][j] = new Pill();
                         }
-                    } else { // 1 in 6 chance
+                    } else { // 1 in 3 chance
                         String[] types = {"Wooden", "Golden", "Stone", "Iron", "Diamond", "Netherite"};
                         int[] atks = {2, 1, 4, 5, 7, 10};
                         // different rarities needs some weighting
@@ -463,7 +483,7 @@ public class Main {
             if (player.getMoney() < 0) {
                 System.out.println("You became too greedy, as punishment you have lost all your money");
             }
-            return String.format("%s rolled %s, and %dx'ed their money\n%s now has $%d%s", player.getName(), Arrays.toString(original), earnings, player.getName(), player.getMoney(), (player.getMoney() < 0) ? " because of greed" : "");
+            return String.format("%s rolled %s, and %dx'ed their money: %s now has $%d%s", player, Arrays.toString(original), earnings, player, player.getMoney(), (player.getMoney() < 0) ? " because of greed" : "");
         }
     }
 }
