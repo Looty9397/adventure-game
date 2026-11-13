@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 // Academic Integrity Pledge is in README.md
-// ADD: mutual .attack() so can track total damage dealt/taken
-//      final attack when you run
 
 public class Main {
     private static Player player;
@@ -170,7 +168,7 @@ public class Main {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (!map[i][j]) {
-                    System.out.print(". "); // not visited
+                    System.out.print("▄ "); // not visited, replaced the . because this is cooler
                 } else if (enemies[i][j] != null) {
                     System.out.print("X "); // enemy on that tile (if you ran)
                     // no need for an "item on that tile" condition because you just pick up all the items you see
@@ -190,11 +188,11 @@ public class Main {
      * @param print PrintWriter to log the actions in a file
      */
     public static void fight (Character enemy, Output print) {
-        int turns = 0;
+        int turns = 0; boolean ran = false;
         print.println(player + " engaged in combat with " + enemy); // yay logs
 
         enemy.introduce();
-        while (!(player.isDead() || enemy.isDead())) {
+        while (!(player.isDead() || enemy.isDead()) && !ran) {
             turns++; // RNG IS KEYYYY
             // More turns = more damage
             // harder fight = more reward
@@ -204,13 +202,10 @@ public class Main {
                 case 'a' -> {
                     System.out.println();
                     print.println(player.useWeapon()); // most of the time will have no functional value, except for Deather
-                    int pDmg = (int)(player.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
-                    // ^ calculated here instead of before so that the changes from weapon.use() will apply
-                    enemy.setHP(enemy.getHP() - pDmg);
-                    System.out.printf("You attack for %d damage: %s now has %d/%d hp\n", pDmg, enemy, enemy.getHP(), enemy.getMaxHP());
-                    print.println(String.format("%s attacks for %d damage: %s now has %d/%d hp", player, pDmg, enemy, enemy.getHP(), enemy.getMaxHP()));
+                    print.println(player.attack(enemy, turns));
                 }
                 case 'u' -> { // same block as in Main.act effectively
+                    // rather dangerous though
                     player.printInventory();
                     System.out.print("Which item do you want to use?\n> ");
                     if (Input.hasNextInt()) {
@@ -225,11 +220,13 @@ public class Main {
                         case 'e', 'r' -> 'w';
                         case 's', 'd' -> 'n';
                         case 'w', 'l' -> 'e';
-                        default -> 'n';
+                        default -> 'n'; // pointless but wtv
                     });
+                    System.out.println("As you run, " + enemy + " gets a hit on you"); // this makes the dragon actually worthy of being a final boss
+                    print.println(player + " ran from the fight, taking a hit");
+                    print.println(enemy.attack(player, turns - 2)); // gotta be less damage because the attack is grazing you
                     System.out.println("You ran from the fight");
-                    print.println(player + " ran from the fight");
-                    return;
+                    ran = true; // i have to do *this* to break the loop :sob:
                 }
                 case 'h' -> {
                     System.out.println("Help:\n|   (A)ttack\n|   (U)se item\n|   (R)un\n|   get (H)elp");
@@ -242,11 +239,8 @@ public class Main {
                 }
             }
             // enemy turn
-            if (!enemy.isDead() && !player.isDead()) { // checks for player because Pill can insta-kill on player's turn
-                int eDmg = (int)(enemy.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
-                player.setHP(player.getHP() - eDmg);
-                System.out.printf("%s attacks you for %d damage: you now have %d/%d hp\n", enemy, eDmg, player.getHP(), player.getMaxHP());
-                print.println(String.format("%s attacks %s for %d damage: %s now has %d/%d hp", enemy, player, eDmg, player, player.getHP(), player.getMaxHP()));
+            if (!enemy.isDead() && !ran) {
+                print.println(enemy.attack(player, turns));
             }
         }
         if (enemy.isDead()) {
@@ -257,9 +251,9 @@ public class Main {
 
             // remove the enemy from the map
             enemies[player.getY()][player.getX()] = null;
-        } else { // other result is player.isDead() == true
+        } else if (player.isDead()) {
             die(print);
-        }
+        } // else nothing happens, output handled above bc this is the RUN && SURVIVE condition
     }
 
     /**
@@ -348,20 +342,21 @@ public class Main {
                         }
                     } else { // 1 in 3 chance
                         String[] types = {"Wooden", "Golden", "Stone", "Iron", "Diamond", "Netherite"};
-                        int[] atks = {2, 1, 4, 5, 7, 10};
+                        int[] atks = {2, 1, 4, 6, 10, 18};
                         // different rarities needs some weighting
                         // wood = 35%, gold = 10%, sotne = 25%, iron = 15%, diamond = 10%, netherite = 5%
                         double rng = Math.random(); int index;
-                        if (rng < 0.35) {index = 0;}
-                        else if (rng < 0.45) {
+                        if (rng < 0.35) { // + 0.35
+                            index = 0;
+                        } else if (rng < 0.45) { // + 0.10
                             index = 1;
-                        } else if (rng < 0.7) {
+                        } else if (rng < 0.7) { // + 0.25
                             index = 2;
-                        } else if (rng < 0.85) {
+                        } else if (rng < 0.85) { // + 0.15
                             index = 3;
-                        } else if (rng < 0.95) {
+                        } else if (rng < 0.95) { // + 0.10
                             index = 4;
-                        } else {
+                        } else { // remainder = 0.05
                             index = 5;
                         }
 
@@ -420,6 +415,7 @@ public class Main {
         // display stats
         System.out.println("You completed a total of " + actions + " actions");
         System.out.println("You ended with $" + player.getMoney());
+        System.out.println(player.getDmgStats());
 
         // thanks for playing
         if (player.isDead()) {

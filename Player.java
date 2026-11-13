@@ -8,6 +8,7 @@ public class Player extends Character {
     private int x; private int y;
     private Item weapon;
     private int money;
+    private final int[] dmg = new int[2];
 
     /**
      * Create a player
@@ -124,36 +125,44 @@ public class Player extends Character {
      * @return log string
      */
     public String move (char dir) {
+        boolean success = false;
         switch (java.lang.Character.toLowerCase(dir)) {
             case 'n', 'u' -> { // north, up
                 if (this.y > 0) {
                     this.y -= 1;
+                    success = true;
                 }
             }
             case 'e', 'r' -> { // east, right
-                if (this.x < 9) {
+                if (this.x < 19) {
                     this.x += 1;
+                    success = true;
                 }
             }
             case 's', 'd' -> { // south, down
                 if (this.y < 9) {
                     this.y += 1;
+                    success = true;
                 }
             }
             case 'w', 'l' -> { // west, left
                 if (this.x > 0) {
                     this.x -= 1;
+                    success = true;
                 }
             }
-            default -> { // L you can't give accurate input
-                return this.getName() + " tried to move in direction " + java.lang.Character.toUpperCase(dir);
-            }
+            default -> {} // L you can't give accurate input, leaves success as false
         }
 
-        this.heal(1); // passive regen
-        // ~~NOTE: this passive regen CANNOT increase the max hp because the formula is (maxhp + (hp + heal)) / 2 and so the 1/2 gets truncated~~
-        // THIS DOES INCREASE MAX HP
-        return this.getName() + " moved in direction " + java.lang.Character.toUpperCase(dir);
+        if (success) {
+            this.heal(1); // passive regen
+            // ~~NOTE: this passive regen CANNOT increase the max hp because the formula is (maxhp + (hp + heal)) / 2 and so the 1/2 gets truncated~~
+            // THIS DOES INCREASE MAX HP
+            return this.getName() + " moved in direction " + java.lang.Character.toUpperCase(dir);
+        } else {
+            System.out.println("You cannot move in that direction");
+            return this.getName() + " tried to move in direction " + java.lang.Character.toUpperCase(dir) + " but failed";
+        }
     }
 
     /**
@@ -216,11 +225,10 @@ public class Player extends Character {
      */
     public void heal (int val) {
         if (this.getHP() + val > this.getMaxHP()) {
-            this.setMaxHP((this.getMaxHP() + (this.getHP() + val) + 1) / 2);
-            // +1 is there so that walking can buf your maxHP
-            // (50 + 51) / 2 = 50(.5)
-            // (50 + 51 + 1) / 2 = 51
-            // (50 + 52 + 1) / 2 = 51(.5)
+            this.setMaxHP((this.getMaxHP() + (this.getHP() + val) + (int)(Math.random() * 2)) / 2);
+            // ~~+1 is there so that walking can buf your maxHP~~
+            // + (int)(Math.random() * 2) is there for a 50% chance of ^, if an odd number, otherwise will change nothing
+            // (1 + 0) / 2 -> 0; (1 + 1) / 2 -> 1; (2 + 1) / 2 -> 3 / 2 -> 1
             this.setHP(this.getMaxHP());
         } else {
             this.setHP(this.getHP() + val);
@@ -240,5 +248,40 @@ public class Player extends Character {
      */
     public void clearInv () {
         this.inventory.clear();
+    }
+
+    /**
+     * take some damage
+     */
+    public void takeDmg (int eDmg) {
+        this.setHP(this.getHP() - eDmg);
+        this.dmg[1] += eDmg;
+    }
+
+    /**
+     * attack a monster
+     * @param target the monster
+     * @param turns multiplier
+     * @return output string
+     */
+    public String attack (Character target, int turns) { // moved from Main.java
+        int pDmg = (int)(this.getSTR() * Math.pow(1.5, turns - 1) * ((Math.random() * 0.2) + 0.9));
+        // ^ calculated here instead of before so that the changes from useWeapon() will apply
+        // Player damage is less variable so you can be more confident
+        if (Math.random() < 0.1) { // crits, 10% for 125-150% damage
+            pDmg = (int)(pDmg * ((Math.random() * 0.25) + 1.25));
+        } // holy buffing the player
+        target.setHP(target.getHP() - pDmg);
+        this.dmg[0] += pDmg;
+        System.out.printf("You attack for %d damage: %s now has %d/%d hp\n", pDmg, target, target.getHP(), target.getMaxHP());
+        return String.format("%s attacks for %d damage: %s now has %d/%d hp", this, pDmg, target, target.getHP(), target.getMaxHP());
+    }
+
+    /**
+     * give a damage stats string to print to the console
+     * @return hi
+     */
+    public String getDmgStats () {
+        return String.format("You dealt a total of %d damage, and took a total of %d damage", dmg[0], dmg[1]);
     }
 }

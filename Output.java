@@ -36,7 +36,8 @@ public class Output {
      */
     public void println (String s) {
         // the reason why this is a whole file
-        this.print.println(String.format("[%s] %s", new Date(), s));
+        GregorianCalendar t = new GregorianCalendar();
+        this.print.println(String.format("[%d/%d/%d %d:%2d:%2d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
     }
 
     public void close () {

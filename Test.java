@@ -5,17 +5,8 @@ import java.util.*;
  */
 public class Test {
     public static void main(String[] args) {
-        int money = 10;
-
-        for (int i = 0; i < 10; i++) {
-            money = randGame(money);
-        }
-
-        Player i = new Player("hi");
-        i.acquire(new Deather());
-        i.equip(0);
-        i.useWeapon();
-        System.out.println(i.getWeapon().getATK());
+        //Calendar time = new Calendar();
+        //time.get(Calendar.MONTH);
     }
 
     public static int randGame (int money) {

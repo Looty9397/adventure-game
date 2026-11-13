@@ -8,6 +8,6 @@ public class DeatherNote extends Item {
 
     @Override
     public void use (Player target) {
-        System.out.println("Speak thrice the name 'Deather' to invoke limitless suffering upon thy foes.");
+        System.out.println("The note reads \"To use the Deather: speak thrice its name or face the consequences\"");
     }
 }

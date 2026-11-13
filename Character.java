@@ -80,4 +80,20 @@ public class Character {
     public String toString () {
         return this.name;
     }
+
+    /**
+     * attack the player
+     * @param target player to attack
+     * @param turns multiplier value
+     * @return string to go to log
+     */
+    public String attack (Player target, int turns) {
+        int eDmg = (int)(this.str * Math.pow(1.5, turns - 1) * ((Math.random() * 0.5) + 0.5));
+        if (Math.random() < 0.1) { // crits, 10% for 100-125% damage
+            eDmg = (int)(eDmg * ((Math.random() * 0.25) + 1));
+        } // holy buffing the player, this is so much weaker than Player.attack() crits lmao
+        target.takeDmg(eDmg);
+        System.out.printf("%s attacks you for %d damage: you now have %d/%d hp\n", this, eDmg, target.getHP(), target.getMaxHP());
+        return String.format("%s attacks %s for %d damage: %s now has %d/%d hp", this, target, eDmg, target, target.getHP(), target.getMaxHP());
+    }
 }

@@ -31,3 +31,11 @@ Date: November 5, 2026
 ### Algorithm Idea
 
 Adventure game, with characters and items
+
+### NOTE
+
+A lot of classes, methods, etc. were added to this project AFTER writing the UML.
+
+This is because I did not know I would need those methods when I created the UML diagrams.
+
+They should be appended to the class, after all the methods specified in the UML doc.
