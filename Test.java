@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 /**
@@ -5,8 +6,26 @@ import java.util.*;
  */
 public class Test {
     public static void main(String[] args) {
-        //Calendar time = new Calendar();
-        //time.get(Calendar.MONTH);
+        int total = 0;
+        for (String i: args) {
+            File f = new File(i);
+            int lineCount = 0;
+            try (Scanner input = new Scanner(f)) {
+                while (input.hasNextLine()) {
+                    lineCount++;
+                    input.nextLine();
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            System.out.println(i + ": " + lineCount + " lines");
+            total += lineCount;
+        }
+        System.out.println(total + " total lines");
+
+        System.out.println("HelloWorld".indexOf("Z"));
+
+        System.out.println(remove("The_code_in_this_repo_was_all_written_by_looty_9397", "_"));
     }
 
     public static int randGame (int money) {
@@ -51,5 +70,17 @@ public class Test {
             System.out.printf("You rolled %s, and you %dx'ed your money\n", Arrays.toString(original), earnings);
         }
         return money;
+    }
+
+    public static String remove (String message, String str) {
+        while (message.indexOf(str) >= 0) {
+            String outMessage = message.substring(0, message.indexOf(str));
+            if (message.indexOf(str) + str.length() < message.length()) {
+                outMessage += message.substring(message.indexOf(str) + str.length());
+            }
+            message = outMessage;
+        }
+        
+        return message;
     }
 }

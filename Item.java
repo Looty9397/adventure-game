@@ -7,17 +7,32 @@ public class Item {
     private int atk;
     private boolean consumable;
 
+    /**
+     * create an item, that is neither consumable nor a weapon
+     * @param name name of item
+     */
     public Item (String name) {
         // default not consumable
         this(name, false);
     }
 
+    /**
+     * create an item, that could be consumable but is not a weapon
+     * @param name name of item
+     * @param consumable if consumable
+     */
     public Item (String name, boolean consumable) {
         // default not weapon
         this(name, false, 0);
-        this.consumable = consumable;
+        this.consumable = consumable; // override the consumable assignment from the Item(String, boolean, int) constructor
     }
 
+    /**
+     * create an item, that could be a weapon, but is not a consumable
+     * @param name name of item
+     * @param weapon if is weapon
+     * @param atk atk of item
+     */
     public Item (String name, boolean weapon, int atk) {
         this.name = name;
         this.consumable = false;
@@ -25,6 +40,10 @@ public class Item {
         this.atk = atk;
     }
 
+    /**
+     * use the item on the player
+     * @param target dat playa
+     */
     public void use (Player target) {
         // This is to be overridden in subclasses.
         // Weapons will just output some stuff like "you swing your sword"
@@ -53,6 +72,10 @@ public class Item {
         return String.format("%s%s%s", this.name, (this.weapon) ? " (W)" : "", (this.consumable) ? " (C)" : "");
     }
 
+    /**
+     * return a copy of the item, for encapsulation
+     * @return copy of the item
+     */
     public Item copy () {
         if (this.weapon) {
             return new Item(this.name, this.weapon, this.atk);

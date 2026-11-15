@@ -21,7 +21,7 @@ public class Output {
             }
         }
 
-        // ChatGPT was used here to correct NoSuchElementException
+        // ChatGPT was used here to correct NoSuchElementException; taken from Main
         // new FileWriter(f, true) makes it be in append mode so its not just continuously overwriting.
         try {
             this.print = new PrintWriter(new FileWriter(f, true));
@@ -37,7 +37,7 @@ public class Output {
     public void println (String s) {
         // the reason why this is a whole file
         GregorianCalendar t = new GregorianCalendar();
-        this.print.println(String.format("[%d/%d/%d %d:%2d:%2d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
+        this.print.println(String.format("[%02d/%02d/%04d %02d:%02d:%02d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
     }
 
     public void close () {

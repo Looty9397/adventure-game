@@ -19,7 +19,7 @@ public class Main {
 
         //for (Character[] i: enemies) {for (Character j: i) {if (j != null) {System.out.println(j.getName());}}}
 
-        // A not dead player is an alive player.
+        // A not-dead player is an alive player.
         while (!player.isDead()) {
             printMap();
             System.out.println(player.getInfo());
@@ -384,6 +384,7 @@ public class Main {
                 break;
             }
         }
+
         // Place the player
         while (enemies[y][x] != null || items[y][x] != null) {
             x = (int)(Math.random() * map.length);
