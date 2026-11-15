@@ -15,6 +15,10 @@ public class Input {
         return input.next().toLowerCase();
     }
 
+    /**
+     * get the next line
+     * @return da next line
+     */
     public static String nextLine () {
         // not formatted because this is used for Player name, which would be wierd
         return input.nextLine();
@@ -38,10 +42,18 @@ public class Input {
         return next().charAt(0);
     }
 
+    /**
+     * is there a next token?
+     * @return well is ther??
+     */
     public static boolean hasNext () {
         return input.hasNext();
     }
 
+    /**
+     * is the next token an int?
+     * @return is it??
+     */
     public static boolean hasNextInt () {
         return input.hasNextInt();
     }

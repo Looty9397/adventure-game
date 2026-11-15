@@ -4,6 +4,9 @@
 public class Deather extends Item {
     private boolean success;
 
+    /**
+     * create the deather
+     */
     public Deather () {
         super("Deather", true, 1);
     }

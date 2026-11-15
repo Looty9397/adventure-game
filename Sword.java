@@ -4,6 +4,11 @@
 public class Sword extends Item {
     private final String type;
 
+    /**
+     * create a sword
+     * @param type the type
+     * @param atk the atk
+     */
     public Sword (String type, int atk) {
         super(type + " Sword", true, atk);
         this.type = type;

@@ -20,10 +20,18 @@ public class Player extends Character {
         //System.out.println(this.inventory.size());
     }
 
+    /**
+     * whats the players x
+     * @return x
+     */
     public int getX () {
         return this.x;
     }
 
+    /**
+     * whats the players y
+     * @return y
+     */
     public int getY () {
         return this.y;
     }
@@ -46,10 +54,18 @@ public class Player extends Character {
         this.x = val[1];
     }
 
+    /**
+     * how much money does player have
+     * @return $$$$
+     */
     public int getMoney () {
         return this.money;
     }
 
+    /**
+     * what is the player's weapon
+     * @return weapon
+     */
     public Item getWeapon () {
         // is the superclass because weapons aren't dedicated sub-subclasses of Item
         // not like Item -> Weapon -> all weapon object
@@ -64,6 +80,10 @@ public class Player extends Character {
         return super.getSTR() + ((this.weapon != null) ? this.weapon.getATK() : 0);
     }
 
+    /**
+     * get richer
+     * @param val mor money
+     */
     public void addMoney (int val) {
         this.money += val;
     }

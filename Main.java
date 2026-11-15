@@ -410,11 +410,10 @@ public class Main {
                 actions++;
             }
         } catch (IOException ex) {
-            System.out.println(ex);
         }
 
         // display stats
-        System.out.println("You completed a total of " + actions + " actions");
+        System.out.println((actions > 0) ? "You completed a total of " + actions + " actions" : "You ended the game at " + new Date());
         System.out.println("You ended with $" + player.getMoney());
         System.out.println(player.getDmgStats());
 

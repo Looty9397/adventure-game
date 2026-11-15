@@ -4,6 +4,12 @@
 public class Shovel extends Item {
     private final String type;
 
+    /**
+     * create a shovel
+     * @param type the type
+     * @param atk the atk
+     */
+
     public Shovel (String type, int atk) {
         super(type + " Shovel", true, atk);
         this.type = type;

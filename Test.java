@@ -6,22 +6,19 @@ import java.util.*;
  */
 public class Test {
     public static void main(String[] args) {
-        int total = 0;
         for (String i: args) {
             File f = new File(i);
-            int lineCount = 0;
             try (Scanner input = new Scanner(f)) {
-                while (input.hasNextLine()) {
-                    lineCount++;
-                    input.nextLine();
+                while (input.hasNext()) {
+                    String next = input.next();
+                    if (next.toLowerCase().equals("discard")) {
+                        System.out.println("Instance of discard in file: " + i);
+                    }
                 }
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            System.out.println(i + ": " + lineCount + " lines");
-            total += lineCount;
         }
-        System.out.println(total + " total lines");
 
         System.out.println("HelloWorld".indexOf("Z"));
 

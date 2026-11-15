@@ -4,6 +4,11 @@
 public class Food extends Item {
     private final int sat; // sat = saturation
 
+    /**
+     * create a food
+     * @param name
+     * @param sat
+     */
     public Food (String name, int sat) {
         super(name, true);
         this.sat = sat;

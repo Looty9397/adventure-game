@@ -4,6 +4,10 @@ import java.util.*;
 public class Output {
     private PrintWriter print = null;
 
+    /**
+     * make a new output
+     * @param filename where the output sends to
+     */
     public Output (String filename) {
         // This code was originally in Main.java, but moved here to make it easier to do timestamped logs.
         File f = new File(filename);
@@ -40,6 +44,9 @@ public class Output {
         this.print.println(String.format("[%02d/%02d/%04d %02d:%02d:%02d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
     }
 
+    /**
+     * close the printwriter
+     */
     public void close () {
         print.println("END OF FILE");
         this.print.close();

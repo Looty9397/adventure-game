@@ -4,6 +4,9 @@
 public class Pill extends Item {
     private final boolean seed;
 
+    /**
+     * create a pill
+     */
     public Pill () {
         super("Pill", true);
         this.seed = Math.random() > 0.3;

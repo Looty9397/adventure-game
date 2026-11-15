@@ -1,0 +1,200 @@
+[11/15/2026 04:58:45] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:46] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:46] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:47] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:47] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:48] Naphtali Rutzky moved in direction D
+[11/15/2026 04:58:49] Naphtali Rutzky moved in direction L
+[11/15/2026 04:58:49] Naphtali Rutzky picked up Wooden Shovel (W)
+[11/15/2026 04:58:49] Naphtali Rutzky engaged in combat with Goblin
+[11/15/2026 04:58:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:58:51] Goblin attacks Naphtali Rutzky for 3 damage: Naphtali Rutzky now has 51/54 hp
+[11/15/2026 04:58:53] Naphtali Rutzky has equipped Wooden Shovel (W) with ATK 1
+[11/15/2026 04:58:55] Naphtali Rutzky moved in direction L
+[11/15/2026 04:58:55] Naphtali Rutzky engaged in combat with Goblin
+[11/15/2026 04:58:56] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:58:56] Naphtali Rutzky attacks for 5 damage: Goblin now has 20/25 hp
+[11/15/2026 04:58:56] Goblin attacks Naphtali Rutzky for 7 damage: Naphtali Rutzky now has 45/54 hp
+[11/15/2026 04:58:56] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:58:56] Naphtali Rutzky attacks for 8 damage: Goblin now has 12/25 hp
+[11/15/2026 04:58:56] Goblin attacks Naphtali Rutzky for 11 damage: Naphtali Rutzky now has 34/54 hp
+[11/15/2026 04:58:56] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:58:56] Naphtali Rutzky attacks for 14 damage: Goblin now has -2/25 hp
+[11/15/2026 04:58:56] Naphtali Rutzky has won the fight and received $62 in spoils
+[11/15/2026 04:58:57] Naphtali Rutzky moved in direction L
+[11/15/2026 04:58:58] Naphtali Rutzky moved in direction L
+[11/15/2026 04:58:59] Naphtali Rutzky moved in direction L
+[11/15/2026 04:58:59] Naphtali Rutzky moved in direction L
+[11/15/2026 04:59:00] Naphtali Rutzky moved in direction L
+[11/15/2026 04:59:00] Naphtali Rutzky picked up Stick
+[11/15/2026 04:59:02] Naphtali Rutzky moved in direction L
+[11/15/2026 04:59:02] Naphtali Rutzky engaged in combat with Adventurer
+[11/15/2026 04:59:03] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:59:03] Naphtali Rutzky attacks for 5 damage: Adventurer now has 95/100 hp
+[11/15/2026 04:59:03] Adventurer attacks Naphtali Rutzky for 4 damage: Naphtali Rutzky now has 36/54 hp
+[11/15/2026 04:59:04] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:59:04] Naphtali Rutzky attacks for 11 damage: Adventurer now has 84/100 hp
+[11/15/2026 04:59:04] Adventurer attacks Naphtali Rutzky for 7 damage: Naphtali Rutzky now has 29/54 hp
+[11/15/2026 04:59:05] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:59:05] Naphtali Rutzky attacks for 12 damage: Adventurer now has 72/100 hp
+[11/15/2026 04:59:05] Adventurer attacks Naphtali Rutzky for 11 damage: Naphtali Rutzky now has 18/54 hp
+[11/15/2026 04:59:06] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:06] Adventurer attacks Naphtali Rutzky for 5 damage: Naphtali Rutzky now has 14/54 hp
+[11/15/2026 04:59:08] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:08] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:10] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:11] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:11] Naphtali Rutzky engaged in combat with Adventurer
+[11/15/2026 04:59:12] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:59:12] Naphtali Rutzky attacks for 6 damage: Adventurer now has 94/100 hp
+[11/15/2026 04:59:12] Adventurer attacks Naphtali Rutzky for 3 damage: Naphtali Rutzky now has 15/54 hp
+[11/15/2026 04:59:12] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 04:59:12] Naphtali Rutzky attacks for 8 damage: Adventurer now has 86/100 hp
+[11/15/2026 04:59:12] Adventurer attacks Naphtali Rutzky for 5 damage: Naphtali Rutzky now has 10/54 hp
+[11/15/2026 04:59:14] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:14] Adventurer attacks Naphtali Rutzky for 4 damage: Naphtali Rutzky now has 7/54 hp
+[11/15/2026 04:59:17] Naphtali Rutzky moved in direction L
+[11/15/2026 04:59:18] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:18] Naphtali Rutzky engaged in combat with Orc
+[11/15/2026 04:59:22] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:22] Orc attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 10/54 hp
+[11/15/2026 04:59:24] Naphtali Rutzky tried to equip something that is not a weapon
+[11/15/2026 04:59:27] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:28] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:28] Naphtali Rutzky picked up Golden Spear (W)
+[11/15/2026 04:59:33] Naphtali Rutzky moved in direction U
+[11/15/2026 04:59:33] Naphtali Rutzky engaged in combat with Bandit
+[11/15/2026 04:59:34] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:34] Bandit attacks Naphtali Rutzky for 2 damage: Naphtali Rutzky now has 12/54 hp
+[11/15/2026 04:59:36] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:36] Naphtali Rutzky picked up Golden Shovel (W)
+[11/15/2026 04:59:36] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:38] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:38] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 14/54 hp
+[11/15/2026 04:59:51] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:51] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:51] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 16/54 hp
+[11/15/2026 04:59:51] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:51] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:51] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 18/54 hp
+[11/15/2026 04:59:51] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:51] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:51] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 20/54 hp
+[11/15/2026 04:59:51] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:51] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:51] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 22/54 hp
+[11/15/2026 04:59:51] Naphtali Rutzky moved in direction R
+[11/15/2026 04:59:51] Naphtali Rutzky engaged in combat with Golem
+[11/15/2026 04:59:51] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 04:59:51] Golem attacks Naphtali Rutzky for 0 damage: Naphtali Rutzky now has 24/54 hp
+[11/15/2026 05:00:00] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:00] Naphtali Rutzky engaged in combat with Adventurer
+[11/15/2026 05:00:01] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 05:00:01] Adventurer attacks Naphtali Rutzky for 2 damage: Naphtali Rutzky now has 24/54 hp
+[11/15/2026 05:00:03] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:03] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:04] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:05] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:06] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:06] Naphtali Rutzky picked up Golden Apple (C)
+[11/15/2026 05:00:08] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:08] Naphtali Rutzky picked up Large Stick
+[11/15/2026 05:00:13] Naphtali Rutzky used the consumable item Golden Apple (C)
+[11/15/2026 05:00:17] Naphtali Rutzky moved in direction U
+[11/15/2026 05:00:18] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:20] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:20] Naphtali Rutzky engaged in combat with Adventurer
+[11/15/2026 05:00:21] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:00:21] Naphtali Rutzky attacks for 6 damage: Adventurer now has 94/100 hp
+[11/15/2026 05:00:21] Adventurer attacks Naphtali Rutzky for 3 damage: Naphtali Rutzky now has 54/57 hp
+[11/15/2026 05:00:21] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:00:21] Naphtali Rutzky attacks for 9 damage: Adventurer now has 85/100 hp
+[11/15/2026 05:00:21] Adventurer attacks Naphtali Rutzky for 8 damage: Naphtali Rutzky now has 46/57 hp
+[11/15/2026 05:00:22] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:00:22] Naphtali Rutzky attacks for 14 damage: Adventurer now has 71/100 hp
+[11/15/2026 05:00:22] Adventurer attacks Naphtali Rutzky for 11 damage: Naphtali Rutzky now has 35/57 hp
+[11/15/2026 05:00:24] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:00:24] Naphtali Rutzky attacks for 19 damage: Adventurer now has 52/100 hp
+[11/15/2026 05:00:24] Adventurer attacks Naphtali Rutzky for 10 damage: Naphtali Rutzky now has 25/57 hp
+[11/15/2026 05:00:27] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 05:00:27] Adventurer attacks Naphtali Rutzky for 8 damage: Naphtali Rutzky now has 18/57 hp
+[11/15/2026 05:00:29] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:31] Naphtali Rutzky moved in direction U
+[11/15/2026 05:00:33] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:34] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:34] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:35] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:37] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:38] Naphtali Rutzky moved in direction U
+[11/15/2026 05:00:39] Naphtali Rutzky moved in direction U
+[11/15/2026 05:00:41] Naphtali Rutzky moved in direction R
+[11/15/2026 05:00:42] Naphtali Rutzky moved in direction U
+[11/15/2026 05:00:42] Naphtali Rutzky picked up Credit Card (C)
+[11/15/2026 05:00:43] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:43] Naphtali Rutzky picked up Stick
+[11/15/2026 05:00:45] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:45] Naphtali Rutzky engaged in combat with Bandit
+[11/15/2026 05:00:46] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 05:00:46] Bandit attacks Naphtali Rutzky for 2 damage: Naphtali Rutzky now has 30/57 hp
+[11/15/2026 05:00:48] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:50] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:51] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:51] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:53] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:54] Naphtali Rutzky moved in direction D
+[11/15/2026 05:00:55] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:55] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:56] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:57] Naphtali Rutzky moved in direction L
+[11/15/2026 05:00:59] Naphtali Rutzky moved in direction R
+[11/15/2026 05:01:00] Naphtali Rutzky moved in direction R
+[11/15/2026 05:01:01] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:02] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:03] Naphtali Rutzky moved in direction L
+[11/15/2026 05:01:04] Naphtali Rutzky moved in direction L
+[11/15/2026 05:01:04] Naphtali Rutzky picked up Stick
+[11/15/2026 05:01:06] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:07] Naphtali Rutzky moved in direction L
+[11/15/2026 05:01:08] Naphtali Rutzky moved in direction D
+[11/15/2026 05:01:09] Naphtali Rutzky moved in direction D
+[11/15/2026 05:01:09] Naphtali Rutzky picked up Rock
+[11/15/2026 05:01:10] Naphtali Rutzky moved in direction D
+[11/15/2026 05:01:11] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:13] Naphtali Rutzky tried to move in direction M but failed
+[11/15/2026 05:01:23] Naphtali Rutzky used the consumable item Credit Card (C)
+[11/15/2026 05:01:25] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:28] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:29] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:30] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:30] Naphtali Rutzky engaged in combat with Orc
+[11/15/2026 05:01:32] Naphtali Rutzky ran from the fight, taking a hit
+[11/15/2026 05:01:32] Orc attacks Naphtali Rutzky for 1 damage: Naphtali Rutzky now has 56/57 hp
+[11/15/2026 05:01:34] Naphtali Rutzky moved in direction D
+[11/15/2026 05:01:35] Naphtali Rutzky moved in direction D
+[11/15/2026 05:01:37] Naphtali Rutzky moved in direction R
+[11/15/2026 05:01:38] Naphtali Rutzky moved in direction R
+[11/15/2026 05:01:38] Naphtali Rutzky moved in direction R
+[11/15/2026 05:01:40] Naphtali Rutzky moved in direction U
+[11/15/2026 05:01:40] Naphtali Rutzky engaged in combat with Adventurer
+[11/15/2026 05:01:42] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:01:42] Naphtali Rutzky attacks for 6 damage: Adventurer now has 46/100 hp
+[11/15/2026 05:01:42] Adventurer attacks Naphtali Rutzky for 4 damage: Naphtali Rutzky now has 54/58 hp
+[11/15/2026 05:01:43] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:01:43] Naphtali Rutzky attacks for 9 damage: Adventurer now has 37/100 hp
+[11/15/2026 05:01:43] Adventurer attacks Naphtali Rutzky for 6 damage: Naphtali Rutzky now has 48/58 hp
+[11/15/2026 05:01:44] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:01:44] Naphtali Rutzky attacks for 14 damage: Adventurer now has 23/100 hp
+[11/15/2026 05:01:44] Adventurer attacks Naphtali Rutzky for 9 damage: Naphtali Rutzky now has 39/58 hp
+[11/15/2026 05:01:46] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:01:46] Naphtali Rutzky attacks for 20 damage: Adventurer now has 3/100 hp
+[11/15/2026 05:01:46] Adventurer attacks Naphtali Rutzky for 13 damage: Naphtali Rutzky now has 26/58 hp
+[11/15/2026 05:01:47] Naphtali Rutzky used their weapon Wooden Shovel (W)
+[11/15/2026 05:01:47] Naphtali Rutzky attacks for 30 damage: Adventurer now has -27/100 hp
+[11/15/2026 05:01:47] Naphtali Rutzky has won the fight and received $559 in spoils
+[11/15/2026 05:01:55] Naphtali Rutzky rolled [6, 6, 3, 3, 2, 3], and 6x'ed their money: Naphtali Rutzky now has $3780
+[11/15/2026 05:02:00] Thank you for playing
+END OF FILE

@@ -4,6 +4,10 @@
 public class Card extends Item {
     private final int value;
 
+    /**
+     * create a card
+     * @param value amt to give/take
+     */
     public Card (int value) {
         super("Credit Card", true);
         this.value = value;

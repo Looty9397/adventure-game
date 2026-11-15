@@ -4,6 +4,12 @@
 public class Spear extends Item {
     private final String type;
 
+    /**
+     * create a spear
+     * @param type the type
+     * @param atk the atk
+     */
+
     public Spear (String type, int atk) {
         super(type + " Spear", true, atk);
         this.type = type;

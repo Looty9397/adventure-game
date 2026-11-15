@@ -11,12 +11,17 @@ Date: November 5, 2026
 
 - Complete classes
   - Must demonstrate inheritance
+  - Item + subclasses, Character + Player
 - Arrays
+  - Main method map
 - ArrayLists
+  - Player inventory
 - Some form of multiplier?
-  - COMBAT
+  - COMBAT, gamlbing
 - Exception handling
+  - mostly done with input validation
 - File I/O
+  - log file, here is where exception handling is present
 - Comments everywhere
 
 ### Submission Requirements
@@ -31,11 +36,3 @@ Date: November 5, 2026
 ### Algorithm Idea
 
 Adventure game, with characters and items
-
-### NOTE
-
-A lot of classes, methods, etc. were added to this project AFTER writing the UML.
-
-This is because I did not know I would need those methods when I created the UML diagrams.
-
-They should be appended to the class, after all the methods specified in the UML doc.

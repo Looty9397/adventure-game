@@ -50,18 +50,34 @@ public class Item {
         System.out.println("You toss the " + name + " in your hand");
     }
 
+    /**
+     * is it a weapon?
+     * @return if is weapon
+     */
     public boolean isWeapon () {
         return this.weapon;
     }
 
+    /**
+     * is it edible?
+     * @return if is consumable
+     */
     public boolean isConsumable () {
         return this.consumable;
     }
 
+    /**
+     * how much atk does it have
+     * @return its atk
+     */
     public int getATK () {
         return this.atk;
     }
 
+    /**
+     * how to call it what
+     * @return name
+     */
     public String getName () {
         return this.name;
     }

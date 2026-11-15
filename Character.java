@@ -10,9 +10,9 @@ public class Character {
 
     /**
      * Create a character without any intro
-     * @param name
-     * @param maxHP
-     * @param str
+     * @param name name
+     * @param maxHP maxHP
+     * @param str strength
      */
     public Character (String name, int maxHP, int str) {
         this(name, maxHP, str, "");
@@ -20,10 +20,10 @@ public class Character {
 
     /**
      * Create a complete character
-     * @param name
-     * @param maxHP
-     * @param str
-     * @param intro
+     * @param name name
+     * @param maxHP maxHP
+     * @param str strength
+     * @param intro introduction phrase
      */
     public Character (String name, int maxHP, int str, String intro) {
         this.name = name;
@@ -40,22 +40,42 @@ public class Character {
         System.out.println(this.intro);
     }
 
+    /**
+     * getHP
+     * @return current hp
+     */
     public int getHP () {
         return this.hp;
     }
 
+    /**
+     * getMaxHP
+     * @return max hp
+     */
     public int getMaxHP () {
         return this.maxHP;
     }
 
+    /**
+     * setMaxHP
+     * @param val new value
+     */
     public void setMaxHP (int val) {
         this.maxHP = val;
     }
 
+    /**
+     * getSTR
+     * @return strength of character
+     */
     public int getSTR () {
         return this.str;
     }
 
+    /**
+     * getName
+     * @return name of character
+     */
     public String getName () {
         return this.name;
     }
@@ -72,6 +92,10 @@ public class Character {
         }
     }
 
+    /**
+     * if character is dead
+     * @return if character is dead
+     */
     public boolean isDead () {
         return this.hp <= 0;
     }
