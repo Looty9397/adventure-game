@@ -6,23 +6,24 @@ import java.util.*;
  */
 public class Test {
     public static void main(String[] args) {
+        int total = 0;
         for (String i: args) {
             File f = new File(i);
             try (Scanner input = new Scanner(f)) {
-                while (input.hasNext()) {
-                    String next = input.next();
-                    if (next.toLowerCase().equals("discard")) {
-                        System.out.println("Instance of discard in file: " + i);
-                    }
+                while (input.hasNextLine()) {
+                    input.nextLine();
+                    total++;
                 }
             } catch (IOException ex) {
                 System.out.println(ex);
             }
         }
 
+        System.out.println("Total " + total + " lines");
+
         System.out.println("HelloWorld".indexOf("Z"));
 
-        System.out.println(remove("The_code_in_this_repo_was_all_written_by_looty_9397", "_"));
+        System.out.println(remove("The_code_in_this_repo_was_all_written_by_looty_9397", "_w"));
     }
 
     public static int randGame (int money) {
