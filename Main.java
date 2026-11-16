@@ -111,9 +111,9 @@ public class Main {
                     case 'g' -> { // "give all"
                         player.acquire(new DeatherNote());
                         player.acquire(new Deather());
-                        player.acquire(new Sword("Dev", 15));
-                        player.acquire(new Spear("Dev", 13));
-                        player.acquire(new Shovel("Dev", 12));
+                        player.acquire(new Sword("Dev", 50));
+                        player.acquire(new Spear("Dev", 45));
+                        player.acquire(new Shovel("Dev", 40));
                         player.acquire(new Food("Dev Apple", 50));
                         player.acquire(new Card(-100));
                         player.acquire(new Card(100));
