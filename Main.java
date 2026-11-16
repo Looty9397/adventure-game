@@ -65,9 +65,6 @@ public class Main {
         System.out.print("What do you do? (h for help)\n> ");
         //String in = input.next();
         //char action = in.charAt(0);
-
-        // ohh fuck i just realized why i have to use java.lang.Character
-        // it's becaues i overwrote the plain Character reference
         switch (Input.nextChar()) {
             case 'm' -> { // Move
                 lastMove = Input.next().charAt(0); // record your step for later
