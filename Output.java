@@ -41,7 +41,7 @@ public class Output {
     public void println (String s) {
         // the reason why this is a whole file
         GregorianCalendar t = new GregorianCalendar();
-        this.print.println(String.format("[%02d/%02d/%04d %02d:%02d:%02d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
+        this.print.println(String.format("[%02d/%02d/%04d %02d:%02d:%02d] %s", t.get(Calendar.MONTH) + 1, t.get(Calendar.DAY_OF_MONTH), t.get(Calendar.YEAR), t.get(Calendar.HOUR_OF_DAY), t.get(Calendar.MINUTE), t.get(Calendar.SECOND), s));
     }
 
     /**
