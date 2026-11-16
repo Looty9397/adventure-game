@@ -451,7 +451,7 @@ public class Main {
             int[] original = Arrays.copyOf(rolls, rolls.length);
             Arrays.sort(rolls); // for ease of calculation
 
-            int earnings = 0;
+            int earnings = 0; // multiplier of the money
             if (rolls[0] == rolls[5] || rolls[0] == rolls[4] || rolls[1] == rolls[5]) {
                 // six of a kind or five or a kind
                 earnings = (int)(Math.random() * 5) + 6; // 6 - 10
