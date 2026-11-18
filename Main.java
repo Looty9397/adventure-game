@@ -235,7 +235,7 @@ public class Main {
                     print.println(player + " did nothing");
                 }
             }
-            // enemy turn
+            // enemy turn is taken
             if (!enemy.isDead() && !ran) {
                 print.println(enemy.attack(player, turns));
             }
